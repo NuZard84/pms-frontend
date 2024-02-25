@@ -14,8 +14,11 @@ import {
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { useNavigate } from "react-router-dom";
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [variant, setVariant] = useState("register");
   const [role, setRole] = useState("patient");
   const [showPassword, setShowPassword] = useState(false);
@@ -120,7 +123,12 @@ const LoginPage = () => {
                   </InputGroup>
                 </FormControl>
               )}
-              <Button colorScheme="blue" size="lg" width="full">
+              <Button
+                colorScheme="blue"
+                size="lg"
+                width="full"
+                onClick={() => navigate("/home")}
+              >
                 Register
               </Button>
             </Stack>
@@ -130,7 +138,9 @@ const LoginPage = () => {
                 <Button
                   variant="link"
                   colorScheme="blue"
-                  onClick={() => setVariant("login")}
+                  onClick={() => {
+                    setVariant("login");
+                  }}
                 >
                   Login
                 </Button>
@@ -210,7 +220,12 @@ const LoginPage = () => {
                   </InputGroup>
                 </FormControl>
               )}
-              <Button colorScheme="blue" size="lg" width="full">
+              <Button
+                colorScheme="blue"
+                size="lg"
+                width="full"
+                onClick={() => navigate("/home")}
+              >
                 Login
               </Button>
             </Stack>
@@ -220,7 +235,9 @@ const LoginPage = () => {
                 <Button
                   variant="link"
                   colorScheme="blue"
-                  onClick={() => setVariant("register")}
+                  onClick={() => {
+                    setVariant("register");
+                  }}
                 >
                   Register
                 </Button>
