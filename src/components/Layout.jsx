@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
-// layout components
+
 
 const Layout = () => {
   return (
