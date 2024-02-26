@@ -1,6 +1,6 @@
 import { Box } from "@chakra-ui/react";
 
-const Home = () => {
+const Dashboard = () => {
   return (
     <Box>
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate
@@ -24,4 +24,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Dashboard;

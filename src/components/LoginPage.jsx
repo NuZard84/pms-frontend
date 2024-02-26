@@ -103,7 +103,7 @@ const LoginPage = () => {
               colorScheme="blue"
               size="lg"
               width="full"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/dashboard")}
             >
               Register
             </Button>
@@ -180,7 +180,7 @@ const LoginPage = () => {
               colorScheme="blue"
               size="lg"
               width="full"
-              onClick={() => navigate("/home")}
+              onClick={() => navigate("/dashboard")}
             >
               Login
             </Button>
