@@ -1,7 +1,12 @@
 import { Box } from "@chakra-ui/react";
+import PatientCard from "../components/patientCard";
 
 const PatientPage = () => {
-  return <Box>Patient Page</Box>;
+  return (
+    <Box>
+      <PatientCard />
+    </Box>
+  );
 };
 
 export default PatientPage;
