@@ -1,27 +1,69 @@
-import { Box } from "@chakra-ui/react";
+import { Box, Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/react";
+import Patients from "../components/Patients";
+import Reports from "../components/Reports";
 
 const Dashboard = () => {
   return (
-    <Box>
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Voluptate
-      deserunt suscipit architecto veritatis doloremque minima atque totam
-      quisquam! Dolorum sequi obcaecati perspiciatis quas aperiam dolore facere
-      sint aspernatur numquam eum, omnis provident laudantium architecto eos
-      corrupti illum sapiente esse porro hic officia rerum. Quaerat dolore
-      repellat aspernatur placeat odio nam dolor commodi atque accusantium,
-      animi eos rem in blanditiis doloremque quod facere quisquam explicabo
-      rerum voluptatibus eaque sit laudantium ratione similique. Cum
-      necessitatibus quam asperiores quibusdam delectus excepturi laboriosam id,
-      cumque expedita magni aperiam ad suscipit quos vitae dolores vero, odio
-      aspernatur et eveniet tempora possimus repudiandae distinctio optio
-      officia? Ducimus cumque incidunt sequi ut quas magni tempore velit
-      quisquam? Reprehenderit ut porro nihil vel ratione, veritatis quis tempora
-      expedita, rerum eligendi neque earum omnis eveniet aliquid sed
-      repudiandae. Distinctio asperiores praesentium et perferendis. Debitis,
-      sint ad atque ex laborum officiis tempore error harum veritatis unde
-      possimus. Aspernatur, modi assumenda.
+    <Box
+      display={"flex"}
+      flexDirection={"column"}
+      justifyContent={"center"}
+      alignItems={"center"}
+      my={8}
+      mx={8}
+    >
+      <Box width={"100%"}>
+        <DataTabs data={tabData} />
+      </Box>
     </Box>
   );
 };
+
+function DataTabs({ data }) {
+  return (
+    <Tabs>
+      <TabList gap={5}>
+        {data.map((tab, index) => (
+          <Tab
+            fontSize={"lg"}
+            fontWeight={"semibold"}
+            key={index}
+            pb={4}
+            mx={2}
+            transition={"all"}
+            transitionDelay={"0.1s"}
+            transitionDuration={"500ms"}
+          >
+            {tab.label}
+          </Tab>
+        ))}
+      </TabList>
+      <TabPanels>
+        {data.map((tab, index) => (
+          <TabPanel
+            transition={"all"}
+            transitionDelay={"0.1s"}
+            transitionDuration={"500ms"}
+            p={4}
+            key={index}
+          >
+            {tab.content}
+          </TabPanel>
+        ))}
+      </TabPanels>
+    </Tabs>
+  );
+}
+
+const tabData = [
+  {
+    label: "Patients",
+    content: <Patients />,
+  },
+  {
+    label: "Reports",
+    content: <Reports />,
+  },
+];
 
 export default Dashboard;

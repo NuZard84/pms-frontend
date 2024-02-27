@@ -48,6 +48,7 @@ export default function Sidebar({ children }) {
             PMS
           </Text>
           <Box
+            cursor={"pointer"}
             onClick={() => setExtended((cur) => !cur)}
             p={3}
             ml={2}
@@ -75,26 +76,38 @@ export default function Sidebar({ children }) {
           rounded={"sm"}
           p={4}
           borderTop={"1px"}
+          borderColor={"gray.400"}
           alignItems={"center"}
         >
-          <Box
-            cursor={"pointer"}
-            onClick={() => navigate("/")}
-            p={3}
-            ml={2}
+          <Tooltip
+            isDisabled={extended}
+            label={"Logout"}
+            fontSize={"md"}
+            hasArrow
+            placement="right"
+            color={"black"}
+            bg={"blue.300"}
+            p={2}
             rounded={"lg"}
-            bg={"gray.50"}
-            _active={{
-              bg: "gray.100",
-              color: "blue.300",
-            }}
-            _hover={{
-              color: "blue.400",
-            }}
           >
-            <LuLogOut />
-          </Box>
-
+            <Box
+              cursor={"pointer"}
+              onClick={() => navigate("/")}
+              p={3}
+              ml={2}
+              rounded={"lg"}
+              bg={"gray.50"}
+              _active={{
+                bg: "gray.100",
+                color: "blue.300",
+              }}
+              _hover={{
+                color: "blue.400",
+              }}
+            >
+              <LuLogOut />
+            </Box>
+          </Tooltip>
           <Box
             transition={"all"}
             transitionDuration={"200ms"}
