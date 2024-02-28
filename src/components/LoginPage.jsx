@@ -12,29 +12,53 @@ import {
   InputGroup,
   InputRightElement,
 } from "@chakra-ui/react";
+import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@chakra-ui/react";
+import { AuthLoginPost, AuthRegisterPost } from "../redux/actions/userActions";
+import { useDispatch } from "react-redux";
 
 const LoginPage = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
 
   const [variant, setVariant] = useState("login");
-  const [role, setRole] = useState("patient");
   const [showPassword, setShowPassword] = useState(false);
-  const [showSecretKey, setShowSecretKey] = useState(false);
+
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [isDoctor, setIsDoctor] = useState(false);
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleToggleSecretKeyVisibility = () => {
-    setShowSecretKey(!showSecretKey);
+  useEffect(() => {
+    console.log("email", email, "pass", password);
+    console.log(isDoctor);
+  }, [isDoctor]);
+
+  const handleLogin = () => {
+    const authLoginPostData = {
+      email,
+      password,
+      isDoctor,
+    };
+    dispatch(AuthLoginPost(authLoginPostData, toast, navigate));
   };
 
-  useEffect(() => {
-    console.log(role);
-  }, [role]);
+  const handleRegister = () => {
+    const authRegisterData = {
+      name,
+      email,
+      password,
+    };
+    dispatch(AuthRegisterPost(authRegisterData, toast, navigate));
+  };
 
   return (
     <Box
@@ -52,7 +76,6 @@ const LoginPage = () => {
           fontWeight="extrabold"
           color="white"
           textAlign="center"
-          dro
         >
           PMS - System
         </Text>
@@ -73,11 +96,21 @@ const LoginPage = () => {
           <Stack spacing="4">
             <FormControl id="name">
               <FormLabel>Name</FormLabel>
-              <Input type="text" placeholder="Enter your name" />
+              <Input
+                type="text"
+                placeholder="Enter your name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+              />
             </FormControl>
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" placeholder="Enter your email" />
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
@@ -85,6 +118,8 @@ const LoginPage = () => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement>
                   <IconButton
@@ -103,7 +138,7 @@ const LoginPage = () => {
               colorScheme="blue"
               size="lg"
               width="full"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => handleRegister()}
             >
               Register
             </Button>
@@ -115,6 +150,9 @@ const LoginPage = () => {
                 variant="link"
                 colorScheme="blue"
                 onClick={() => {
+                  setEmail("");
+                  setName("");
+                  setPassword("");
                   setVariant("login");
                 }}
               >
@@ -141,9 +179,7 @@ const LoginPage = () => {
               <Switch
                 id="role-selection"
                 onChange={() => {
-                  setRole((prevRole) =>
-                    prevRole === "doctor" ? "patient" : "doctor"
-                  );
+                  setIsDoctor((prev) => (prev === true ? false : true));
                 }}
               />
             </FormControl>
@@ -154,7 +190,12 @@ const LoginPage = () => {
           <Stack spacing="4">
             <FormControl id="email">
               <FormLabel>Email address</FormLabel>
-              <Input type="email" placeholder="Enter your email" />
+              <Input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+              />
             </FormControl>
             <FormControl id="password">
               <FormLabel>Password</FormLabel>
@@ -162,6 +203,8 @@ const LoginPage = () => {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
                 />
                 <InputRightElement>
                   <IconButton
@@ -180,7 +223,7 @@ const LoginPage = () => {
               colorScheme="blue"
               size="lg"
               width="full"
-              onClick={() => navigate("/dashboard")}
+              onClick={() => handleLogin()}
             >
               Login
             </Button>
@@ -192,6 +235,8 @@ const LoginPage = () => {
                 variant="link"
                 colorScheme="blue"
                 onClick={() => {
+                  setEmail("");
+                  setPassword("");
                   setVariant("register");
                 }}
               >
