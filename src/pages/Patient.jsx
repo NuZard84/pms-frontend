@@ -1,3 +1,4 @@
+
 import { Box, Tabs, TabList, Tab, TabPanel, TabPanels } from "@chakra-ui/react";
 import Patients from "../components/Patients";
 import Reports from "../components/Reports";
@@ -15,6 +16,7 @@ const PatientPage = () => {
       <Box width={"100%"}>
         <DataTabs data={tabData} />
       </Box>
+
     </Box>
   );
 };
