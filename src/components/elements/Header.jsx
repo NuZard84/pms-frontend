@@ -13,6 +13,7 @@ import {
   MenuList,
   Text,
 } from "@chakra-ui/react";
+import { Fragment } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
@@ -118,12 +119,12 @@ const Header = () => {
               </MenuButton>
               <MenuList color={"black"} mt={"4"} py={"2"}>
                 {menuData.map((item, i) => (
-                  <>
+                  <Fragment key={i}>
                     <MenuItem fontWeight={"semibold"} opacity={0.75}>
                       {item.label}
                     </MenuItem>
                     {i !== menuData.length - 1 && <MenuDivider />}
-                  </>
+                  </Fragment>
                 ))}
               </MenuList>
             </Menu>
