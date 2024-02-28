@@ -1,16 +1,13 @@
-import { Card, Box } from "@chakra-ui/react";
-import DoctorDetail from "./DoctorDetail";
+// import { Card, Box } from "@chakra-ui/react";
 import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
   TableCaption,
   TableContainer,
-  Text,
 } from "@chakra-ui/react";
 import { Fragment } from "react";
 
