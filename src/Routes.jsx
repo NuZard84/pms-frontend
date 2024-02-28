@@ -7,6 +7,7 @@ import SettingsPage from "./pages/Settings";
 import Dashboard from "./pages/Dashboard";
 import Help from "./pages/Help";
 import DetaileFilledPage from "./components/DetailFilledPage";
+import Consult from "./pages/patient/Consult";
 
 const commonRoutes = [
   {
@@ -24,6 +25,10 @@ const commonRoutes = [
   {
     path: "/help",
     element: <Help />,
+  },
+  {
+    path: "/patient/consult",
+    element: <Consult />,
   },
 ];
 

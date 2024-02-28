@@ -34,7 +34,7 @@ const DetaileFilledPage = () => {
 
   const doctorDeatilpost = async () => {
     try {
-      const res = await axios.post(`${SERVER_API}/details/doctor`, {
+      const res = await axios.post(`${VB_SERVER_API}/details/doctor`, {
         catagory,
         name,
         age,
@@ -43,6 +43,7 @@ const DetaileFilledPage = () => {
         gender,
         education,
       });
+      console.log(res);
     } catch (error) {
       console.log(error);
     }

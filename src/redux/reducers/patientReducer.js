@@ -1,27 +1,26 @@
-import { SET_IS_DETAILFILLED, SET_IS_DOCTOR, SET_USER_DETAILS } from "../types";
+import { PATIENT_SET_IS_DOCTOR, PATIENT_SET_USER_DETAILS } from "../types";
 
 const initialState = {
   isDoctor: false,
-  isDetailsFilled: false,
+  // isDetailsFilled: false,
   userDetail: null,
 };
 
 export default function (state = initialState, action) {
   switch (action.type) {
-    case SET_IS_DOCTOR:
+    case PATIENT_SET_IS_DOCTOR:
       return {
         ...state,
-        isDoctor: action,
-        payload,
+        isDoctor: action.payload,
       };
 
-    case SET_IS_DETAILFILLED:
-      return {
-        ...state,
-        isDetailsFilled: action.payload,
-      };
+    // case SET_IS_DETAILFILLED:
+    //   return {
+    //     ...state,
+    //     isDetailsFilled: action.payload,
+    //   };
 
-    case SET_USER_DETAILS:
+    case PATIENT_SET_USER_DETAILS:
       return {
         ...state,
         userDetail: {

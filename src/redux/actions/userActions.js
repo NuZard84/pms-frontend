@@ -1,5 +1,10 @@
 import { SERVER_API, VB_SERVER_API, DIPAL_SERVER_API } from "../../config";
-import { LOGIN_LOADING, SET_USER_DETAILS, STOP_LOGIN_LOADING } from "../types";
+import {
+  DOCTOR_SET_USER_DETAILS,
+  LOGIN_LOADING,
+  PATIENT_SET_USER_DETAILS,
+  STOP_LOGIN_LOADING,
+} from "../types";
 import axios from "axios";
 
 export const AuthLoginPost =
@@ -7,8 +12,12 @@ export const AuthLoginPost =
     try {
       dispatch({ type: LOGIN_LOADING });
       console.log(userData);
-      const res = await axios.post(`${SERVER_API}/auth/login`, userData);
-      dispatch({ type: SET_USER_DETAILS, payload: [] });
+      const res = await axios.post(`${VB_SERVER_API}/auth/login`, userData);
+      if (userData.isDoctor) {
+        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: res.data.user });
+      } else {
+        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: res.data.user });
+      }
       console.log("hello auth login");
       toast({
         title: "Login successful.",
@@ -19,10 +28,14 @@ export const AuthLoginPost =
         position: "top",
       });
       dispatch({ type: STOP_LOGIN_LOADING });
-      if (res.data.user.isDetailsFilled) {
-        navigate("/dashboard");
+      if (userData.isDoctor) {
+        if (res.data.user.isDetailsFilled) {
+          navigate("/dashboard");
+        } else {
+          navigate("/doctor/filldetails");
+        }
       } else {
-        navigate("/doctor/filldetails");
+        navigate("/dashboard");
       }
       console.log(res);
     } catch (error) {
@@ -44,7 +57,12 @@ export const AuthRegisterPost =
   (userData, toast, navigate) => async (dispatch) => {
     try {
       dispatch({ type: LOGIN_LOADING });
-      const res = await axios.post(`${SERVER_API}/auth/register`, userData);
+      const res = await axios.post(`${VB_SERVER_API}/auth/register`, userData);
+      if (userData.isDoctor) {
+        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: [] });
+      } else {
+        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: [] });
+      }
       toast({
         title: "Account created.",
         description: "We've created your account for you.",
@@ -54,7 +72,6 @@ export const AuthRegisterPost =
         position: "top",
       });
       dispatch({ type: STOP_LOGIN_LOADING });
-
       navigate("/dashboard");
       console.log(res);
     } catch (error) {

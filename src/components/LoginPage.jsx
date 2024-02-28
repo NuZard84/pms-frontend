@@ -11,6 +11,8 @@ import {
   IconButton,
   InputGroup,
   InputRightElement,
+  RadioGroup,
+  Radio,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -32,6 +34,9 @@ const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isDoctor, setIsDoctor] = useState(false);
+  const [gender, setGender] = useState("male");
+  const [age, setAge] = useState("");
+  const [phoneNumber, setPhonNumber] = useState("");
 
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
@@ -56,6 +61,9 @@ const LoginPage = () => {
       name,
       email,
       password,
+      age,
+      phoneNumber,
+      gender,
     };
     dispatch(AuthRegisterPost(authRegisterData, toast, navigate));
   };
@@ -133,8 +141,37 @@ const LoginPage = () => {
                 </InputRightElement>
               </InputGroup>
             </FormControl>
-
+            <FormControl id="gender" my={4}>
+              <RadioGroup onChange={setGender} value={gender}>
+                <Stack direction="row">
+                  <Radio value="male">Male</Radio>
+                  <Radio value="female">Female</Radio>
+                  <Radio value="others">Others</Radio>
+                </Stack>
+              </RadioGroup>
+            </FormControl>
+            <Box display={"flex"} gap={5} justifyContent={"space-between"}>
+              <FormControl id="phonenumber">
+                <FormLabel>Phone number</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Enter your phone number"
+                  value={phoneNumber}
+                  onChange={(e) => setPhonNumber(e.target.value)}
+                />
+              </FormControl>
+              <FormControl id="age" width={"60%"}>
+                <FormLabel>Age</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Enter your age"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                />
+              </FormControl>
+            </Box>
             <Button
+              mt={4}
               colorScheme="blue"
               size="lg"
               width="full"
