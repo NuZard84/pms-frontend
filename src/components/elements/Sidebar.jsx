@@ -15,7 +15,7 @@ const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
   const navigate = useNavigate();
-  const [extended, setExtended] = useState(false);
+  const [extended, setExtended] = useState(true);
 
   return (
     <Box as="aside">
