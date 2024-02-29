@@ -8,6 +8,7 @@ import Dashboard from "./pages/Dashboard";
 import Help from "./pages/Help";
 import DetaileFilledPage from "./components/DetailFilledPage";
 import Consult from "./pages/patient/Consult";
+import TimelinePatient from "./pages/patient/Timeline";
 
 const commonRoutes = [
   {
@@ -29,6 +30,10 @@ const commonRoutes = [
   {
     path: "/patient/consult",
     element: <Consult />,
+  },
+  {
+    path: "/patient/timeline",
+    element: <TimelinePatient />,
   },
 ];
 
