@@ -1,8 +1,13 @@
-import { Box, Text, Badge, Button } from "@chakra-ui/react";
+import { Box, Text, Badge, Button, Divider } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { PATIENT_UPDATE_TIMELINE_ID } from "../../redux/types";
+import {
+  PATIENT_UPDATE_TIMELINE,
+  PATIENT_UPDATE_TIMELINE_ID,
+} from "../../redux/types";
+import axios from "axios";
+import { SERVER_API, VB_SERVER_API } from "../../config";
 import {
   Modal,
   ModalOverlay,
@@ -10,25 +15,85 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  FormControl,
-  FormLabel,
   Textarea,
-  ModalCloseButton,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
-import { useState } from "react";
+import { useState, useRef } from "react";
+
+function UpdateModal({
+  isOpen,
+  onClose,
+  updatedConsultencyReportPost,
+  symptoms,
+  setSymptoms,
+  medicalHistory,
+  setMedicalHistory,
+  medications,
+  setMedication,
+}) {
+  const initialRef = useRef(null);
+  const finalRef = useRef(null);
+  console.log("component rendered");
+  return (
+    <>
+      <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Update your reports</ModalHeader>
+          {/* <ModalCloseButton /> */}
+          <ModalBody pb={6}>
+            <Textarea
+              ref={initialRef}
+              placeholder="Update symptoms"
+              value={symptoms}
+              onChange={(e) => {
+                setSymptoms(e.target.value);
+              }}
+            />
+            <Textarea
+              mt={4}
+              placeholder="Update medical history"
+              value={medicalHistory}
+              onChange={(e) => setMedicalHistory(e.target.value)}
+            />
+            <Textarea
+              mt={4}
+              placeholder="Update medication"
+              value={medications}
+              onChange={(e) => setMedication(e.target.value)}
+            />
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={updatedConsultencyReportPost}
+            >
+              Save
+            </Button>
+            <Button onClick={onClose}>Cancel</Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+    </>
+  );
+}
 
 const TimelinePatient = () => {
+  console.log("timeline rendered");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const timeline = useSelector((state) => state.patient.userDetail.Timeline);
+  const timeline = useSelector((state) => state.patient.Timeline);
+  const email = useSelector((state) => state.patient.userDetail.email);
 
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
   const [id, setId] = useState("");
+  const [data, setData] = useState(timeline);
 
   const handleUpdateReport = (
     itemId,
@@ -36,6 +101,7 @@ const TimelinePatient = () => {
     medicalHistory,
     symptoms
   ) => {
+    console.log("rendered insider handleUpdateReport");
     setId(itemId); // Set the ID of the item being edited
     setMedicalHistory(medicalHistory); // Update medical history state
     setMedication(medications); // Update medications state
@@ -46,6 +112,7 @@ const TimelinePatient = () => {
 
   const updatedConsultencyReportPost = async () => {
     try {
+      console.warn("enter to update report api");
       const res = await axios.post(`${SERVER_API}/consult/update`, {
         email,
         checkPointId: id,
@@ -53,7 +120,13 @@ const TimelinePatient = () => {
         medicalHistory,
         medications,
       });
-      console.log(res);
+      onClose();
+      console.log(res.data.data.Timeline);
+      dispatch({
+        type: PATIENT_UPDATE_TIMELINE,
+        payload: res.data.data.Timeline,
+      });
+      setData(res.data.data.Timeline);
     } catch (error) {
       console.log(error);
     }
@@ -61,49 +134,6 @@ const TimelinePatient = () => {
 
   //   console.log(timeline);
 
-  function UpdateModal() {
-    return (
-      <>
-        <Modal isOpen={isOpen} onClose={onClose}>
-          <ModalOverlay />
-          <ModalContent>
-            <ModalHeader>Update your reports</ModalHeader>
-            <ModalCloseButton />
-            <ModalBody pb={6}>
-              <Textarea
-                placeholder="Update symptoms"
-                value={symptoms}
-                onChange={(e) => setSymptoms(e.target.value)}
-              />
-              <Textarea
-                mt={4}
-                placeholder="Update medical history"
-                value={medicalHistory}
-                onChange={(e) => setMedicalHistory(e.target.value)}
-              />
-              <Textarea
-                mt={4}
-                placeholder="Update medication"
-                value={medications}
-                onChange={(e) => setMedications(e.target.value)}
-              />
-            </ModalBody>
-
-            <ModalFooter>
-              <Button
-                colorScheme="blue"
-                mr={3}
-                onClick={updatedConsultencyReportPost}
-              >
-                Save
-              </Button>
-              <Button onClick={onClose}>Cancel</Button>
-            </ModalFooter>
-          </ModalContent>
-        </Modal>
-      </>
-    );
-  }
   return (
     <>
       <Box
@@ -134,7 +164,7 @@ const TimelinePatient = () => {
           </Text>
         </Box>
         <Box p={8} my={4}>
-          {timeline.map((item, i) => {
+          {timeline?.map((item, i) => {
             return (
               <Box
                 key={item._id}
@@ -226,6 +256,49 @@ const TimelinePatient = () => {
                       {item.medications}
                     </Text>
                   </Box>
+                  {item.status && (
+                    <>
+                      <Divider orientation="horizontal" my={3} />
+                      {item.prescription && (
+                        <>
+                          <Box>
+                            <Text
+                              fontSize={"xl"}
+                              fontWeight={"bold"}
+                              letterSpacing={0.5}
+                              textColor={"gray.600"}
+                            >
+                              Prescription :
+                            </Text>
+                          </Box>
+                          <Box ml={2} mb={2}>
+                            <Text fontSize={"lg"} fontWeight={"semibold"}>
+                              {item.prescription}
+                            </Text>
+                          </Box>
+                        </>
+                      )}
+                      {item.result && (
+                        <>
+                          <Box>
+                            <Text
+                              fontSize={"xl"}
+                              fontWeight={"bold"}
+                              letterSpacing={0.5}
+                              textColor={"gray.600"}
+                            >
+                              Results :
+                            </Text>
+                          </Box>
+                          <Box ml={2} mb={2}>
+                            <Text fontSize={"lg"} fontWeight={"semibold"}>
+                              {item.result}
+                            </Text>
+                          </Box>
+                        </>
+                      )}
+                    </>
+                  )}
                 </Box>
                 <Box
                   ml={8}
@@ -234,8 +307,11 @@ const TimelinePatient = () => {
                   justifyContent={"space-between"}
                   alignItems={"flex-end"}
                 >
-                  <Badge variant={"subtle"} colorScheme="green">
-                    pending
+                  <Badge
+                    variant={item.status ? "solid" : "subtle"}
+                    colorScheme="green"
+                  >
+                    {item.status ? "varified" : "pending"}
                   </Badge>
                   <Box
                     as="button"
@@ -268,7 +344,17 @@ const TimelinePatient = () => {
           })}
         </Box>
       </Box>
-      <UpdateModal />
+      <UpdateModal
+        isOpen={isOpen}
+        onClose={onClose}
+        updatedConsultencyReportPost={updatedConsultencyReportPost}
+        symptoms={symptoms}
+        setSymptoms={setSymptoms}
+        medicalHistory={medicalHistory}
+        setMedicalHistory={setMedicalHistory}
+        medications={medications}
+        setMedication={setMedication}
+      />
     </>
   );
 };

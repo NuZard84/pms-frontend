@@ -59,6 +59,14 @@ const Layout = () => {
             active={location.pathname === "/patient/timeline"}
           />
         </Link>
+        <Link to="/doctor/timeline">
+          <SidebarItems
+            icon={<BsQuestionSquare size={20} />}
+            text={"Dr timeline"}
+            alert={false}
+            active={location.pathname === "/doctor/timeline"}
+          />
+        </Link>
         <Link to="/help">
           <SidebarItems
             icon={<BsQuestionSquare size={20} />}

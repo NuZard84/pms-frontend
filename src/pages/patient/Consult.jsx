@@ -27,6 +27,11 @@ const Consult = () => {
 
   const email = useSelector((state) => state.patient.userDetail.email);
   console.log(email);
+  const timelineRedux = useSelector(
+    (state) => state.patient.userDetail.Timeline
+  );
+
+  console.log(timelineRedux);
 
   const handleCategoryChange = (value) => {
     setSelectedCategory(value);

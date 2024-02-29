@@ -2,6 +2,7 @@ import {
   DOCTOR_SET_IS_DETAILFILLED,
   DOCTOR_SET_USER_DETAILS,
   DOCTOR_SET_IS_DOCTOR,
+  DOCTOR_UPDATE_TIMELINE,
 } from "../types";
 
 const initialState = {
@@ -29,6 +30,15 @@ const doctorReducer = (state = initialState, action) => {
         ...state,
         userDetail: {
           ...action.payload,
+        },
+      };
+
+    case DOCTOR_UPDATE_TIMELINE:
+      return {
+        ...state,
+        userDetail: {
+          ...state.userDetail,
+          timeline: action.payload,
         },
       };
     default:

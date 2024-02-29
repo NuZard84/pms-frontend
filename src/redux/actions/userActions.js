@@ -12,7 +12,7 @@ export const AuthLoginPost =
     try {
       dispatch({ type: LOGIN_LOADING });
       console.log(userData);
-      const res = await axios.post(`${VB_SERVER_API}/auth/login`, userData);
+      const res = await axios.post(`${SERVER_API}/auth/login`, userData);
       if (userData.isDoctor) {
         dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: res.data.user });
       } else {
