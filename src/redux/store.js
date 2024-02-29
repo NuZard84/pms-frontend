@@ -17,7 +17,7 @@ const doctorPersistConfig = {
 const patientPersistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["userDetail", "isDoctor"],
+  whitelist: ["userDetail", "isDetailfillled", "isDoctor", "Timeline"],
 };
 
 const reducers = combineReducers({
