@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
 
 const Patients = () => {
-  return <Box>PAtients</Box>;
+  return <Box>Patients</Box>;
 };
 
 export default Patients;
