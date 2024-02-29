@@ -4,6 +4,8 @@ import {
   LOGIN_LOADING,
   PATIENT_SET_USER_DETAILS,
   STOP_LOGIN_LOADING,
+  LOGOUT_DOCTOR,
+  LOGOUT_PATIENT,
 } from "../types";
 import axios from "axios";
 
@@ -57,11 +59,11 @@ export const AuthRegisterPost =
   (userData, toast, navigate) => async (dispatch) => {
     try {
       dispatch({ type: LOGIN_LOADING });
-      const res = await axios.post(`${VB_SERVER_API}/auth/register`, userData);
+      const res = await axios.post(`${SERVER_API}/auth/register`, userData);
       if (userData.isDoctor) {
-        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: [] });
+        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: res.data.user });
       } else {
-        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: [] });
+        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: res.data.user });
       }
       toast({
         title: "Account created.",
@@ -89,3 +91,11 @@ export const AuthRegisterPost =
       navigate("/");
     }
   };
+
+export const LogOutDoctor = () => ({
+  type: LOGOUT_DOCTOR,
+});
+
+export const LogOutPatient = () => ({
+  type: LOGOUT_PATIENT,
+});

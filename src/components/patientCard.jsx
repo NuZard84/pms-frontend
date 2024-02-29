@@ -9,7 +9,12 @@ import {
   TableCaption,
   TableContainer,
 } from "@chakra-ui/react";
-import { Fragment } from "react";
+import axios from "axios";
+import { Fragment, useEffect } from "react";
+import { SERVER_API, VB_SERVER_API } from "../config";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 const headerName = [
   "name",
@@ -52,6 +57,40 @@ const mergedDoctors = [
 ];
 
 export default function PatientCard() {
+  const [patientsData, setPatientsData] = useState([]);
+  // const user = useSelector((state) => state.doctor.userDetail);
+  // const id = "65df66db6a43c379f8bc640e";
+
+  // console.log(user);
+  // useEffect(async () => {
+  //   const res = await axios.post(`${SERVER_API}/fetchpatienta`, {
+  //     category: "gynecologist",
+  //   });
+  //   console.log(res.data.patients);
+  //   setPatientsData(res.data.patients);
+  // }, []);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fun = async () => {
+      const res = await axios.post(`${SERVER_API}/fetchpatients`, {
+        category: "gynecologist",
+      });
+      setPatientsData(res.data.patients);
+      console.log(res.data.patients);
+    };
+
+    fun();
+  }, []);
+
+  const handlePAtientTimelineRedirect = (email, id) => {
+    try {
+      console.log(email, id);
+      navigate(`/doctor/timeline/${id}`);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   // return <h1>Hello</h1>;
   return (
     // <Box
@@ -95,19 +134,22 @@ export default function PatientCard() {
               <Td>metres (m)</Td>
               <Td isNumeric>0.91444</Td>
             </Tr> */}
-            {mergedDoctors.map((el, i) => {
+            {patientsData.map((el, i) => {
               return (
                 <Tr
                   key={i}
                   color={i % 2 === 0 ? " #F5F5F5" : ""}
                   bg={i % 2 === 0 ? "#2977ff" : ""}
+                  onClick={() => {
+                    handlePAtientTimelineRedirect(el.email, el._id);
+                  }}
                 >
                   <Td>{el.name}</Td>
                   <Td>{el.email}</Td>
                   <Td>{el.gender}</Td>
                   <Td>{el.age}</Td>
                   <Td>{el.phoneNumber}</Td>
-                  <Td>{el.education}</Td>
+                  <Td>{"--"}</Td>
                 </Tr>
               );
             })}
