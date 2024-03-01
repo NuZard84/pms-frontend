@@ -1,4 +1,4 @@
-import { Box, Text, Badge, Button, Divider } from "@chakra-ui/react";
+import { Box, Text, Badge, Button, Divider, useToast } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
@@ -85,6 +85,7 @@ const TimelinePatient = () => {
   console.log("timeline rendered");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const userTimeline = useSelector((state) => state.user.userDetail.Timeline);
@@ -155,6 +156,14 @@ const TimelinePatient = () => {
         medications,
       });
       onClose();
+      toast({
+        title: "Your report updated successfully.",
+        description: "Doctor will varify it soon.",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(res.data.data.Timeline);
       setTimeLine(res.data.data.Timeline);
       // dispatch({
@@ -162,6 +171,14 @@ const TimelinePatient = () => {
       //   payload: res.data.data.Timeline,
       // });
     } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
   };
@@ -340,7 +357,7 @@ const TimelinePatient = () => {
                 >
                   <Badge
                     variant={item.status ? "solid" : "subtle"}
-                    colorScheme="green"
+                    colorScheme={item.status ? "green" : "red"}
                   >
                     {item.status ? "varified" : "pending"}
                   </Badge>

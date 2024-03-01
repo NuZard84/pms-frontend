@@ -110,7 +110,9 @@ export default function PatientCard() {
       {/* <div>All Doctors</div> */}
       <TableContainer>
         <Table variant="simple">
-          <TableCaption>Imperial to metric conversion factors</TableCaption>
+          <TableCaption>
+            List of all patients related with doctor specializaion
+          </TableCaption>
           <Thead>
             <Tr>
               {headerName.map((el, i) => {
