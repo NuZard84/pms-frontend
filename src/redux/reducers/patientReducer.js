@@ -2,29 +2,17 @@ import {
   PATIENT_SET_IS_DOCTOR,
   PATIENT_SET_USER_DETAILS,
   PATIENT_UPDATE_TIMELINE_ID,
+  PATIENT_UPDATE_TIMELINE,
+  LOGOUT_PATIENT,
 } from "../types";
 
 const initialState = {
-  isDoctor: false,
-  // isDetailsFilled: false,
   userDetail: null,
-  updated_timelineId: "",
+  Timeline: [],
 };
 
-export default function (state = initialState, action) {
+const patientReducer = (state = initialState, action) => {
   switch (action.type) {
-    case PATIENT_SET_IS_DOCTOR:
-      return {
-        ...state,
-        isDoctor: action.payload,
-      };
-
-    // case SET_IS_DETAILFILLED:
-    //   return {
-    //     ...state,
-    //     isDetailsFilled: action.payload,
-    //   };
-
     case PATIENT_SET_USER_DETAILS:
       return {
         ...state,
@@ -33,12 +21,17 @@ export default function (state = initialState, action) {
         },
       };
 
-    case PATIENT_UPDATE_TIMELINE_ID:
+    case PATIENT_UPDATE_TIMELINE:
       return {
         ...state,
-        updated_timelineId: action.payload,
+        Timeline: action.payload,
       };
+    case LOGOUT_PATIENT:
+      return initialState;
+
     default:
       return state;
   }
-}
+};
+
+export default patientReducer;

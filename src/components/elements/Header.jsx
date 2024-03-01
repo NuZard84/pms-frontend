@@ -17,6 +17,7 @@ import { Fragment } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { useSelector } from "react-redux";
 
 const Header = () => {
   const menuData = [
@@ -95,11 +96,7 @@ const Header = () => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Avatar
-              size="md"
-              name="Segun Adebayo"
-              src="https://bit.ly/sage-adebayo"
-            />
+            <Avatar size="md" name={"hello"} />
             <Menu>
               <MenuButton>
                 <Box
@@ -110,7 +107,8 @@ const Header = () => {
                   alignItems={"center"}
                 >
                   <Text color={"black"} fontWeight={"semibold"} fontSize={"md"}>
-                    Dr. Segun Adebayo
+                    {/* {user.isDoctor ? `Dr ${user.name}` : `${user.name}`} */}
+                    hello
                   </Text>
                   <Box>
                     <TiArrowSortedDown color="black" />

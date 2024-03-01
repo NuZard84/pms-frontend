@@ -4,7 +4,7 @@ const SettingsPage = () => {
   return (
     <Box p="16">
       <Box>
-        <Text fontSize="lg" pl="35px" mb="5px">
+        <Text fontSize="large" pl="35px" mb="5px" fontWeight="500">
           Enter secret key provided by your organization to access AI powered
           analysis
         </Text>

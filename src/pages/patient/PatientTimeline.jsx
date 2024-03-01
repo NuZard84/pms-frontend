@@ -1,10 +1,13 @@
-import { Box, Text, Badge, Button, Input } from "@chakra-ui/react";
+import { Box, Text, Badge, Button, Divider } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { FiEdit } from "react-icons/fi";
 import { useNavigate } from "react-router-dom";
-import { PATIENT_UPDATE_TIMELINE_ID } from "../../redux/types";
+import {
+  PATIENT_UPDATE_TIMELINE,
+  PATIENT_UPDATE_TIMELINE_ID,
+} from "../../redux/types";
 import axios from "axios";
-import { VB_SERVER_API } from "../../config";
+import { SERVER_API, VB_SERVER_API } from "../../config";
 import {
   Modal,
   ModalOverlay,
@@ -12,13 +15,11 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
-  FormControl,
-  FormLabel,
   Textarea,
-  ModalCloseButton,
 } from "@chakra-ui/react";
+
 import { useDisclosure } from "@chakra-ui/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function UpdateModal({
   isOpen,
@@ -86,13 +87,28 @@ const TimelinePatient = () => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const timeline = useSelector((state) => state.patient.userDetail.Timeline);
-  const email = useSelector((state) => state.patient.userDetail.email);
+  const userTimeline = useSelector((state) => state.user.userDetail.Timeline);
+  const patientTimeline = useSelector((state) => state.patient.Timeline);
+
+  console.log(
+    "user time:",
+    userTimeline,
+    "patient time:",
+    patientTimeline,
+    Boolean(patientTimeline)
+  );
+
+  const email = useSelector((state) => state.user.userDetail.email);
+  const user = useSelector((state) => state.user.userDetail);
 
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
   const [id, setId] = useState("");
+  const [timeLine, setTimeLine] = useState([]);
+
+  console.log("timeline", userTimeline);
+  console.log("user", user);
 
   const handleUpdateReport = (
     itemId,
@@ -101,18 +117,37 @@ const TimelinePatient = () => {
     symptoms
   ) => {
     console.log("rendered insider handleUpdateReport");
-    setId(itemId); // Set the ID of the item being edited
-    setMedicalHistory(medicalHistory); // Update medical history state
-    setMedication(medications); // Update medications state
-    setSymptoms(symptoms); // Update symptoms state
-    onOpen(); // Open the modal
+    setId(itemId);
+    setMedicalHistory(medicalHistory);
+    setMedication(medications);
+    setSymptoms(symptoms);
+    onOpen();
   };
-  //   console.log(id, medications, medicalHistory, symptoms);
+
+  useEffect(() => {
+    const getPatient = async () => {
+      try {
+        console.log("getPatient");
+        const res = await axios.post(`${SERVER_API}/getpatient`, {
+          id: user._id,
+        });
+        setTimeLine(res.data.patient.Timeline);
+        // dispatch({
+        //   type: PATIENT_UPDATE_TIMELINE,
+        //   payload: res.data.patient.Timeline,
+        // });
+        console.log(res.data.patient);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPatient();
+  }, []);
 
   const updatedConsultencyReportPost = async () => {
     try {
       console.warn("enter to update report api");
-      const res = await axios.post(`${VB_SERVER_API}/consult/update`, {
+      const res = await axios.post(`${SERVER_API}/consult/update`, {
         email,
         checkPointId: id,
         symptoms,
@@ -120,13 +155,16 @@ const TimelinePatient = () => {
         medications,
       });
       onClose();
-      console.log(res);
+      console.log(res.data.data.Timeline);
+      setTimeLine(res.data.data.Timeline);
+      // dispatch({
+      //   type: PATIENT_UPDATE_TIMELINE,
+      //   payload: res.data.data.Timeline,
+      // });
     } catch (error) {
       console.log(error);
     }
   };
-
-  //   console.log(timeline);
 
   return (
     <>
@@ -158,7 +196,7 @@ const TimelinePatient = () => {
           </Text>
         </Box>
         <Box p={8} my={4}>
-          {timeline.map((item, i) => {
+          {timeLine?.map((item, i) => {
             return (
               <Box
                 key={item._id}
@@ -176,7 +214,6 @@ const TimelinePatient = () => {
                 <Box
                   display={"flex"}
                   justifyContent={"center"}
-                  //   alignItems={"center"}
                   flex={1}
                   flexDirection={"column"}
                   ml={2}
@@ -250,6 +287,49 @@ const TimelinePatient = () => {
                       {item.medications}
                     </Text>
                   </Box>
+                  {item.status && (
+                    <>
+                      <Divider orientation="horizontal" my={3} />
+                      {item.prescription && (
+                        <>
+                          <Box>
+                            <Text
+                              fontSize={"xl"}
+                              fontWeight={"bold"}
+                              letterSpacing={0.5}
+                              textColor={"gray.600"}
+                            >
+                              Prescription :
+                            </Text>
+                          </Box>
+                          <Box ml={2} mb={2}>
+                            <Text fontSize={"lg"} fontWeight={"semibold"}>
+                              {item.prescription}
+                            </Text>
+                          </Box>
+                        </>
+                      )}
+                      {item.result && (
+                        <>
+                          <Box>
+                            <Text
+                              fontSize={"xl"}
+                              fontWeight={"bold"}
+                              letterSpacing={0.5}
+                              textColor={"gray.600"}
+                            >
+                              Results :
+                            </Text>
+                          </Box>
+                          <Box ml={2} mb={2}>
+                            <Text fontSize={"lg"} fontWeight={"semibold"}>
+                              {item.result}
+                            </Text>
+                          </Box>
+                        </>
+                      )}
+                    </>
+                  )}
                 </Box>
                 <Box
                   ml={8}
@@ -258,8 +338,11 @@ const TimelinePatient = () => {
                   justifyContent={"space-between"}
                   alignItems={"flex-end"}
                 >
-                  <Badge variant={"subtle"} colorScheme="green">
-                    pending
+                  <Badge
+                    variant={item.status ? "solid" : "subtle"}
+                    colorScheme="green"
+                  >
+                    {item.status ? "varified" : "pending"}
                   </Badge>
                   <Box
                     as="button"

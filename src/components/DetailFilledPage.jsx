@@ -1,14 +1,21 @@
 import {
   Box,
   Heading,
-  Text,
   Button,
   Input,
-  FormControl,
-  FormLabel,
   Stack,
   Radio,
   RadioGroup,
+  MenuButton,
+  MenuItemOption,
+  MenuList,
+  MenuOptionGroup,
+  Text,
+  Menu,
+  FormControl,
+  FormLabel,
+  Textarea,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useState, useEffect } from "react";
@@ -16,10 +23,21 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { SERVER_API, VB_SERVER_API } from "../config";
 import { useToast } from "@chakra-ui/react";
-import { Textarea } from "@chakra-ui/react";
+
+import { useDispatch, useSelector } from "react-redux";
+import { DOCTOR_SET_USER_DETAILS, SET_USER_DETAILS } from "../redux/types";
+import { doctor_categories } from "../pages/patient/categoryData";
+import { IoMdArrowDropdown } from "react-icons/io";
 
 const DetaileFilledPage = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => {
+    state.user.userDetail;
+  });
+
+  9;
   const toast = useToast();
 
   const [name, setName] = useState("");
@@ -28,14 +46,19 @@ const DetaileFilledPage = () => {
   const [age, setAge] = useState("");
   const [phoneNumber, setPhonNumber] = useState("");
   const [education, setEducation] = useState("");
-  const [catagory, setCatagory] = useState("");
+  const [category, setCatagory] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   console.log(gender);
 
+  const handleCategoryChange = (value) => {
+    setSelectedCategory(value);
+  };
+
   const doctorDeatilpost = async () => {
     try {
-      const res = await axios.post(`${VB_SERVER_API}/details/doctor`, {
-        catagory,
+      const res = await axios.post(`${SERVER_API}/details/doctor`, {
+        category: selectedCategory,
         name,
         age,
         phoneNumber,
@@ -44,6 +67,8 @@ const DetaileFilledPage = () => {
         education,
       });
       console.log(res);
+      dispatch({ type: SET_USER_DETAILS, payload: res.data });
+      navigate("/dashboard");
     } catch (error) {
       console.log(error);
     }
@@ -165,12 +190,77 @@ const DetaileFilledPage = () => {
           </FormControl>
           <FormControl id="key">
             <FormLabel>Specialist of</FormLabel>
-            <Input
+            {/* <Input
               type="text"
               placeholder="You are specialist of ..."
-              value={catagory}
+              value={category}
               onChange={(e) => setCatagory(e.target.value)}
-            />
+            /> */}
+            <Menu closeOnSelect>
+              <MenuButton
+                as={Box}
+                rounded={"lg"}
+                width={"35%"}
+                p={2}
+                borderWidth={"2px"}
+                borderColor={"gray.200"}
+                display={"flex"}
+                justifyContent={"space-between"}
+                alignItems={"center"}
+                fontSize={"lg"}
+                fontWeight={"semibold"}
+                color={"gray.600"}
+              >
+                <Box
+                  w={"100%"}
+                  display={"flex"}
+                  flexDirection={"row"}
+                  justifyContent={"space-between"}
+                  alignItems={"center"}
+                >
+                  <Text>
+                    {selectedCategory ? selectedCategory : "Select a category"}
+                  </Text>
+                  <IoMdArrowDropdown />
+                </Box>
+              </MenuButton>
+              <MenuList
+                minWidth={"500px"}
+                maxHeight="300px"
+                overflowY="auto"
+                css={{
+                  "&::-webkit-scrollbar": {
+                    width: "6px",
+                  },
+                  "&::-webkit-scrollbar-track": {
+                    background: "#f1f1f1",
+                  },
+                  "&::-webkit-scrollbar-thumb": {
+                    background: "#2977ff",
+                    borderRadius: "4px",
+                  },
+                  "&::-webkit-scrollbar-thumb:hover": {
+                    background: "#555",
+                  },
+                }}
+              >
+                <MenuOptionGroup
+                  defaultValue="asc"
+                  title="Doctors category"
+                  type="radio"
+                  value={selectedCategory}
+                  onChange={handleCategoryChange}
+                >
+                  {doctor_categories.map((item, i) => {
+                    return (
+                      <MenuItemOption value={item.value} key={i}>
+                        {item.label}
+                      </MenuItemOption>
+                    );
+                  })}
+                </MenuOptionGroup>
+              </MenuList>
+            </Menu>
           </FormControl>
 
           <Button

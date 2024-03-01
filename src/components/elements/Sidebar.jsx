@@ -10,12 +10,24 @@ import { createContext, useContext, useState } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { LogOutUser } from "../../redux/actions/userActions";
 
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
+  const dispatch = useDispatch();
+
+  const user = useSelector((state) => state.user.userDetail);
+
   const navigate = useNavigate();
   const [extended, setExtended] = useState(true);
+
+  const handleLogout = () => {
+    console.log("logout");
+    dispatch(LogOutUser());
+    navigate("/");
+  };
 
   return (
     <Box as="aside">
@@ -92,7 +104,7 @@ export default function Sidebar({ children }) {
           >
             <Box
               cursor={"pointer"}
-              onClick={() => navigate("/")}
+              onClick={() => handleLogout()}
               p={3}
               ml={2}
               rounded={"lg"}
