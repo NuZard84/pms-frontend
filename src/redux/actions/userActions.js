@@ -6,6 +6,9 @@ import {
   STOP_LOGIN_LOADING,
   LOGOUT_DOCTOR,
   LOGOUT_PATIENT,
+  LOGOUT_USER,
+  SET_USER_DETAILS,
+  SET_USER_IS_DOCTOR,
 } from "../types";
 import axios from "axios";
 
@@ -15,11 +18,11 @@ export const AuthLoginPost =
       dispatch({ type: LOGIN_LOADING });
       console.log(userData);
       const res = await axios.post(`${SERVER_API}/auth/login`, userData);
-      if (userData.isDoctor) {
-        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: res.data.user });
-      } else {
-        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: res.data.user });
-      }
+
+      console.log("redux doc");
+      dispatch({ type: SET_USER_IS_DOCTOR, payload: userData.isDoctor });
+      dispatch({ type: SET_USER_DETAILS, payload: res.data.user });
+
       console.log("hello auth login");
       toast({
         title: "Login successful.",
@@ -60,11 +63,7 @@ export const AuthRegisterPost =
     try {
       dispatch({ type: LOGIN_LOADING });
       const res = await axios.post(`${SERVER_API}/auth/register`, userData);
-      if (userData.isDoctor) {
-        dispatch({ type: DOCTOR_SET_USER_DETAILS, payload: res.data.user });
-      } else {
-        dispatch({ type: PATIENT_SET_USER_DETAILS, payload: res.data.user });
-      }
+
       toast({
         title: "Account created.",
         description: "We've created your account for you.",
@@ -73,6 +72,8 @@ export const AuthRegisterPost =
         isClosable: true,
         position: "top",
       });
+      dispatch({ type: SET_USER_IS_DOCTOR, payload: userData.isDoctor });
+      dispatch({ type: SET_USER_DETAILS, payload: res.data.user });
       dispatch({ type: STOP_LOGIN_LOADING });
       navigate("/dashboard");
       console.log(res);
@@ -92,10 +93,6 @@ export const AuthRegisterPost =
     }
   };
 
-export const LogOutDoctor = () => ({
-  type: LOGOUT_DOCTOR,
-});
-
-export const LogOutPatient = () => ({
-  type: LOGOUT_PATIENT,
+export const LogOutUser = () => ({
+  type: LOGOUT_USER,
 });

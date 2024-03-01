@@ -20,10 +20,6 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import { useSelector } from "react-redux";
 
 const Header = () => {
-  const user =
-    useSelector((state) => state.doctor.userDetail) ||
-    useSelector((state) => state.patient.userDetail);
-
   const menuData = [
     {
       label: "My profile",
@@ -100,7 +96,7 @@ const Header = () => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Avatar size="md" name={user.name} />
+            <Avatar size="md" name={"hello"} />
             <Menu>
               <MenuButton>
                 <Box
@@ -111,7 +107,8 @@ const Header = () => {
                   alignItems={"center"}
                 >
                   <Text color={"black"} fontWeight={"semibold"} fontSize={"md"}>
-                    {user.isDoctor ? `Dr ${user.name}` : `${user.name}`}
+                    {/* {user.isDoctor ? `Dr ${user.name}` : `${user.name}`} */}
+                    hello
                   </Text>
                   <Box>
                     <TiArrowSortedDown color="black" />

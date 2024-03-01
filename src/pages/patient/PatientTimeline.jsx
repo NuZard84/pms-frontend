@@ -19,7 +19,7 @@ import {
 } from "@chakra-ui/react";
 
 import { useDisclosure } from "@chakra-ui/react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 
 function UpdateModal({
   isOpen,
@@ -87,17 +87,27 @@ const TimelinePatient = () => {
   const navigate = useNavigate();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const timeline = useSelector((state) => state.patient.Timeline);
-  const email = useSelector((state) => state.patient.userDetail.email);
-  const user = useSelector((state) => state.patient.userDetail);
+  const userTimeline = useSelector((state) => state.user.userDetail.Timeline);
+  const patientTimeline = useSelector((state) => state.patient.Timeline);
+
+  console.log(
+    "user time:",
+    userTimeline,
+    "patient time:",
+    patientTimeline,
+    Boolean(patientTimeline)
+  );
+
+  const email = useSelector((state) => state.user.userDetail.email);
+  const user = useSelector((state) => state.user.userDetail);
 
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
   const [id, setId] = useState("");
-  const [data, setData] = useState(timeline);
+  const [timeLine, setTimeLine] = useState([]);
 
-  console.log("timeline", timeline);
+  console.log("timeline", userTimeline);
   console.log("user", user);
 
   const handleUpdateReport = (
@@ -114,6 +124,26 @@ const TimelinePatient = () => {
     onOpen();
   };
 
+  useEffect(() => {
+    const getPatient = async () => {
+      try {
+        console.log("getPatient");
+        const res = await axios.post(`${SERVER_API}/getpatient`, {
+          id: user._id,
+        });
+        setTimeLine(res.data.patient.Timeline);
+        // dispatch({
+        //   type: PATIENT_UPDATE_TIMELINE,
+        //   payload: res.data.patient.Timeline,
+        // });
+        console.log(res.data.patient);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPatient();
+  }, []);
+
   const updatedConsultencyReportPost = async () => {
     try {
       console.warn("enter to update report api");
@@ -126,11 +156,11 @@ const TimelinePatient = () => {
       });
       onClose();
       console.log(res.data.data.Timeline);
-      dispatch({
-        type: PATIENT_UPDATE_TIMELINE,
-        payload: res.data.data.Timeline,
-      });
-      setData(res.data.data.Timeline);
+      setTimeLine(res.data.data.Timeline);
+      // dispatch({
+      //   type: PATIENT_UPDATE_TIMELINE,
+      //   payload: res.data.data.Timeline,
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -166,7 +196,7 @@ const TimelinePatient = () => {
           </Text>
         </Box>
         <Box p={8} my={4}>
-          {timeline?.map((item, i) => {
+          {timeLine?.map((item, i) => {
             return (
               <Box
                 key={item._id}

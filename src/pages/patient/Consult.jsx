@@ -27,7 +27,7 @@ const Consult = () => {
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
 
-  const email = useSelector((state) => state.patient.userDetail.email);
+  const email = useSelector((state) => state.user.userDetail.email);
   console.log(email);
   const timelineRedux = useSelector(
     (state) => state.patient.userDetail.Timeline

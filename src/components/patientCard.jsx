@@ -8,6 +8,7 @@ import {
   Td,
   TableCaption,
   TableContainer,
+  StatLabel,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Fragment, useEffect } from "react";
@@ -58,6 +59,10 @@ const mergedDoctors = [
 
 export default function PatientCard() {
   const [patientsData, setPatientsData] = useState([]);
+
+  const redux = useSelector((state) => state);
+
+  console.log("card redux", redux);
   // const user = useSelector((state) => state.doctor.userDetail);
   // const id = "65df66db6a43c379f8bc640e";
 
@@ -74,7 +79,7 @@ export default function PatientCard() {
   useEffect(() => {
     const fun = async () => {
       const res = await axios.post(`${SERVER_API}/fetchpatients`, {
-        category: "gynecologist",
+        category: redux.user.userDetail.specialist,
       });
       setPatientsData(res.data.patients);
       console.log(res.data.patients);

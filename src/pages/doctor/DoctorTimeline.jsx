@@ -184,7 +184,12 @@ const TimeLineDoctor = () => {
   const [prescription, setPrescription] = useState("");
   const [result, setResult] = useState("");
   const [openIndex, setOpenIndex] = useState(null);
+  const [bloodPressure, setBloodPressure] = useState("");
+  const [bodyTemperature, setBodyTemperature] = useState("");
+  const [respiratoryRate, setRespiratoryRate] = useState("");
+  const [heartRate, setHeartRate] = useState("");
   const [chatInput, setChatInput] = useState("");
+  const [timeLine, setTimeLine] = useState([]);
 
   const timeline123 = useSelector((state) => state.patient.Timeline);
 
@@ -205,10 +210,11 @@ const TimeLineDoctor = () => {
           id: params.id,
         });
         setEmail(res.data.patient.email);
-        dispatch({
-          type: PATIENT_UPDATE_TIMELINE,
-          payload: res.data.patient.Timeline,
-        });
+        setTimeLine(res.data.patient.Timeline);
+        // dispatch({
+        //   type: PATIENT_UPDATE_TIMELINE,
+        //   payload: res.data.patient.Timeline,
+        // });
         console.log(res.data.patient);
       } catch (error) {
         console.log(error);
@@ -219,7 +225,7 @@ const TimeLineDoctor = () => {
 
   const handleVarifyEdit = async (index, id) => {
     console.log("varify nd edit", index, id);
-    const updatedTimeline = [...timeline123];
+    const updatedTimeline = [...timeLine];
     const currentItem = updatedTimeline[index];
 
     try {
@@ -228,6 +234,10 @@ const TimeLineDoctor = () => {
           ...currentItem,
           prescription,
           result,
+          bloodPressure,
+          bodyTemperature,
+          respiratoryRate,
+          heartRate,
           status: true,
         };
       } else {
@@ -235,6 +245,10 @@ const TimeLineDoctor = () => {
           ...currentItem,
           prescription: prescription || currentItem.prescription,
           result: result || currentItem.result,
+          bloodPressure: bloodPressure || currentItem.bloodPressure,
+          bodyTemperature: bodyTemperature || currentItem.bodyTemperature,
+          respiratoryRate: respiratoryRate || currentItem.respiratoryRate,
+          heartRate: heartRate || currentItem.heartRate,
           status: true,
         };
       }
@@ -244,14 +258,19 @@ const TimeLineDoctor = () => {
         checkPointId: id,
         prescription: updatedTimeline[index].prescription,
         result: updatedTimeline[index].result,
+        bloodPressure: updatedTimeline[index].bloodPressure,
+        bodyTemperature: updatedTimeline[index].bodyTemperature,
+        respiratoryRate: updatedTimeline[index].respiratoryRate,
+        heartRate: updatedTimeline[index].heartRate,
         status: Boolean(updatedTimeline[index].status),
       });
       console.log("res", res.data.data.Timeline);
+      setTimeLine(res.data.data.Timeline);
 
-      dispatch({
-        type: PATIENT_UPDATE_TIMELINE,
-        payload: res.data.data.Timeline,
-      });
+      // dispatch({
+      //   type: PATIENT_UPDATE_TIMELINE,
+      //   payload: res.data.data.Timeline,
+      // });
     } catch (error) {
       console.log(error);
     }
@@ -324,7 +343,7 @@ const TimeLineDoctor = () => {
           </Text>
         </Box>
         <Box p={8} my={4}>
-          {timeline123?.map((item, i) => {
+          {timeLine?.map((item, i) => {
             return (
               <Fragment key={item._id}>
                 <Box
@@ -421,6 +440,7 @@ const TimeLineDoctor = () => {
                           {item.medications}
                         </Text>
                       </Box>
+
                       {item.status && (
                         <>
                           <Divider orientation="horizontal" my={3} />
@@ -458,6 +478,82 @@ const TimeLineDoctor = () => {
                               <Box ml={2} mb={2}>
                                 <Text fontSize={"lg"} fontWeight={"semibold"}>
                                   {item.result}
+                                </Text>
+                              </Box>
+                            </>
+                          )}
+                          {item.bloodPressure && (
+                            <>
+                              <Box>
+                                <Text
+                                  fontSize={"xl"}
+                                  fontWeight={"bold"}
+                                  letterSpacing={0.5}
+                                  textColor={"gray.600"}
+                                >
+                                  Blood pressure :
+                                </Text>
+                              </Box>
+                              <Box ml={2} mb={2}>
+                                <Text fontSize={"lg"} fontWeight={"semibold"}>
+                                  {item.bloodPressure}
+                                </Text>
+                              </Box>
+                            </>
+                          )}
+                          {item.bodyTemperature && (
+                            <>
+                              <Box>
+                                <Text
+                                  fontSize={"xl"}
+                                  fontWeight={"bold"}
+                                  letterSpacing={0.5}
+                                  textColor={"gray.600"}
+                                >
+                                  Body tempreture :
+                                </Text>
+                              </Box>
+                              <Box ml={2} mb={2}>
+                                <Text fontSize={"lg"} fontWeight={"semibold"}>
+                                  {item.bodyTemperature}
+                                </Text>
+                              </Box>
+                            </>
+                          )}
+                          {item.respiratoryRate && (
+                            <>
+                              <Box>
+                                <Text
+                                  fontSize={"xl"}
+                                  fontWeight={"bold"}
+                                  letterSpacing={0.5}
+                                  textColor={"gray.600"}
+                                >
+                                  Respiratory rate (breath count per min) :
+                                </Text>
+                              </Box>
+                              <Box ml={2} mb={2}>
+                                <Text fontSize={"lg"} fontWeight={"semibold"}>
+                                  {item.respiratoryRate}
+                                </Text>
+                              </Box>
+                            </>
+                          )}
+                          {item.heartRate && (
+                            <>
+                              <Box>
+                                <Text
+                                  fontSize={"xl"}
+                                  fontWeight={"bold"}
+                                  letterSpacing={0.5}
+                                  textColor={"gray.600"}
+                                >
+                                  Heart rate :
+                                </Text>
+                              </Box>
+                              <Box ml={2} mb={2}>
+                                <Text fontSize={"lg"} fontWeight={"semibold"}>
+                                  {item.heartRate}
                                 </Text>
                               </Box>
                             </>
@@ -533,6 +629,72 @@ const TimeLineDoctor = () => {
                               onChange={(e) => setPrescription(e.target.value)}
                             />
                           </FormControl>
+
+                          <FormControl id="bloodpressure" my={5}>
+                            <FormLabel
+                              fontSize={"lg"}
+                              fontWeight={"bold"}
+                              textColor={"gray.600"}
+                            >
+                              Blood pressur
+                            </FormLabel>
+                            <Input
+                              borderWidth={"2px"}
+                              placeholder="Enter blood pressure"
+                              value={bloodPressure}
+                              onChange={(e) => setBloodPressure(e.target.value)}
+                            />
+                          </FormControl>
+                          <FormControl id="bodytemperature" my={5}>
+                            <FormLabel
+                              fontSize={"lg"}
+                              fontWeight={"bold"}
+                              textColor={"gray.600"}
+                            >
+                              Body temperature
+                            </FormLabel>
+                            <Input
+                              borderWidth={"2px"}
+                              placeholder="Enter body temperature"
+                              value={bodyTemperature}
+                              onChange={(e) =>
+                                setBodyTemperature(e.target.value)
+                              }
+                            />
+                          </FormControl>
+                          <FormControl id="respiratoryrate" my={5}>
+                            <FormLabel
+                              fontSize={"lg"}
+                              fontWeight={"bold"}
+                              textColor={"gray.600"}
+                            >
+                              Respiratory rate
+                            </FormLabel>
+                            <Input
+                              borderWidth={"2px"}
+                              placeholder="Enter respiratory rate"
+                              value={respiratoryRate}
+                              onChange={(e) =>
+                                setRespiratoryRate(e.target.value)
+                              }
+                            />
+                          </FormControl>
+                          <FormControl id="heartrate" my={5}>
+                            <FormLabel
+                              fontSize={"lg"}
+                              fontWeight={"bold"}
+                              textColor={"gray.600"}
+                            >
+                              Heart rate
+                            </FormLabel>
+                            <Input
+                              borderWidth={"2px"}
+                              placeholder="Enter heart rate"
+                              value={heartRate}
+                              onChange={(e) => setHeartRate(e.target.value)}
+                            />
+                          </FormControl>
+
                           <FormControl id="results" my={5}>
                             <FormLabel
                               fontSize={"lg"}
