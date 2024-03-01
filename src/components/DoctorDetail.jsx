@@ -4,8 +4,8 @@ import {
   Divider,
   defineStyleConfig,
   Button,
-  useDisclosure,
   Input,
+  FormLabel,
 } from "@chakra-ui/react";
 import {
   Modal,
@@ -14,6 +14,7 @@ import {
   ModalHeader,
   ModalFooter,
   ModalBody,
+  useDisclosure,
   ModalCloseButton,
   Textarea,
 } from "@chakra-ui/react";
@@ -52,32 +53,44 @@ function UpdateModal({
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Update your reports</ModalHeader>
+          <ModalHeader>Update your profile</ModalHeader>
           {/* <ModalCloseButton /> */}
           <ModalBody pb={6}>
+            <FormLabel>
+              <Text>Name :</Text>
+            </FormLabel>
             <Input
               ref={initialRef}
-              placeholder="Update symptoms"
+              placeholder="Update your name"
               value={name}
               onChange={(e) => {
                 setName(e.target.value);
               }}
             />
+            <FormLabel>
+              <Text>Age :</Text>
+            </FormLabel>
             <Input
-              mt={4}
-              placeholder="Update medical history"
+              mb={4}
+              placeholder="Update your age"
               value={age}
               onChange={(e) => setAge(e.target.value)}
             />
+            <FormLabel>
+              <Text>Education :</Text>
+            </FormLabel>
             <Input
-              mt={4}
-              placeholder="Update education"
+              mb={4}
+              placeholder="Update your education"
               value={education}
               onChange={(e) => setEducation(e.target.value)}
             />
+            <FormLabel>
+              <Text>Speacialist :</Text>
+            </FormLabel>
             <Input
-              mt={4}
-              placeholder="Update medication"
+              mb={4}
+              placeholder="Update your expertise"
               value={specialist}
               onChange={(e) => setSpecialist(e.target.value)}
             />
@@ -220,7 +233,8 @@ const DoctorDetail = ({ doctor }) => {
               onClick={() => {
                 onOpen();
               }}
-              colorScheme="blue"
+              bg="#2977ff"
+              textColor="whitesmoke"
             >
               Edit your profile
             </Button>

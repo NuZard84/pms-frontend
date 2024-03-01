@@ -5,6 +5,7 @@ import {
   Avatar,
   AvatarBadge,
   Tooltip,
+  useToast,
 } from "@chakra-ui/react";
 import { createContext, useContext, useState } from "react";
 import { MdOutlineArrowBackIosNew } from "react-icons/md";
@@ -16,6 +17,7 @@ import { LogOutUser } from "../../redux/actions/userActions";
 const SidebarContext = createContext();
 
 export default function Sidebar({ children }) {
+  const toast = useToast();
   const dispatch = useDispatch();
 
   const user = useSelector((state) => state.user.userDetail);
@@ -24,6 +26,14 @@ export default function Sidebar({ children }) {
   const [extended, setExtended] = useState(true);
 
   const handleLogout = () => {
+    toast({
+      title: "logged out.",
+      description: "You are logged out successfully.",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+      position: "top",
+    });
     console.log("logout");
     dispatch(LogOutUser());
     navigate("/");

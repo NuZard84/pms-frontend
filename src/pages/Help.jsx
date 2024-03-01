@@ -8,7 +8,23 @@ import {
   Image,
 } from "@chakra-ui/react";
 import image from "./../images/light-blue.png";
+import { useState } from "react";
+import axios from "axios";
+import { SERVER_API } from "../config";
+import { useSelector } from "react-redux";
 const Help = () => {
+  const [query, setQuery] = useState("");
+
+  const email = useSelector((state) => state.user.userDetail.email); // replace with your email
+
+  const handleSubmissionQuery = async () => {
+    const res = await axios.post(`${SERVER_API}/query/add`, {
+      query,
+      email,
+    });
+    setQuery("");
+    console.log(res);
+  };
   return (
     <>
       <Box>
@@ -25,14 +41,22 @@ const Help = () => {
                 actions.
               </Text>
 
-              <Input placeholder="Enter your query..." size="lg" m="10px" />
+              <Input
+                placeholder="Enter your query..."
+                size="lg"
+                m="10px"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+              />
 
               <Button
-                colorScheme="blue"
+                bg="#2977ff"
+                color="whitesmoke"
                 alignSelf="right"
                 width="fit-content"
                 marginTop="5"
                 m="10px"
+                onClick={handleSubmissionQuery}
               >
                 Submit
               </Button>

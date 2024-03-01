@@ -20,6 +20,8 @@ import {
   FormControl,
   FormLabel,
   Textarea,
+  useToast,
+  Image,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -176,6 +178,7 @@ const TimeLineDoctor = () => {
   const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const toast = useToast();
 
   console.log(params.id);
 
@@ -195,7 +198,7 @@ const TimeLineDoctor = () => {
 
   console.log("redux", timeline123);
   const [email, setEmail] = useState("");
-
+  const [patientName, setPatientName] = useState("");
   const [isVarified, setIsVarified] = useState(timeline123.map(() => false));
 
   const handleCollapseToggle = (index) => {
@@ -210,6 +213,7 @@ const TimeLineDoctor = () => {
           id: params.id,
         });
         setEmail(res.data.patient.email);
+        setPatientName(res.data.patient.name);
         setTimeLine(res.data.patient.Timeline);
         // dispatch({
         //   type: PATIENT_UPDATE_TIMELINE,
@@ -264,14 +268,30 @@ const TimeLineDoctor = () => {
         heartRate: updatedTimeline[index].heartRate,
         status: Boolean(updatedTimeline[index].status),
       });
+      toast({
+        title: "Updated successfully",
+        description: "You have successfully edited patient timeline",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log("res", res.data.data.Timeline);
       setTimeLine(res.data.data.Timeline);
-
+      handleCollapseToggle(index);
       // dispatch({
       //   type: PATIENT_UPDATE_TIMELINE,
       //   payload: res.data.data.Timeline,
       // });
     } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Check deatial if it failed and try again late.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
   };
@@ -321,25 +341,32 @@ const TimeLineDoctor = () => {
           },
         }}
       >
-        <Box position={"fixed"} bottom={"5%"} right={"5%"}>
-          <Button
+        <Box position={"fixed"} bottom={"5%"} right={"2%"}>
+          {/* <Button
             display={"flex"}
             flexDirection={"row"}
             justifyContent={"center"}
             alignItems={"center"}
-            colorScheme="blue"
+            // colorScheme="blue"
+
             gap={2}
             onClick={() => onOpen()}
-          >
-            <Box>
+          > */}
+          {/* <Box>
               <GiArtificialHive size={20} />
-            </Box>
-            Chat-bot
-          </Button>
+            </Box> */}
+          <Image
+            onClick={() => onOpen()}
+            borderRadius="full"
+            boxSize="60px"
+            alt="Bot"
+            src="https://media.istockphoto.com/id/1445730887/vector/chatbot-head-in-speech-bubble-vector-icon.jpg?s=612x612&w=0&k=20&c=0NVG2sbSxNNo3mGfCCmGUSq_GC1UTvPyeO1OnNrY13U="
+          />
+          {/* </Button> */}
         </Box>
         <Box>
           <Text fontSize={"4xl"} color={"black"} fontWeight={"bold"}>
-            Your Timelines
+            {patientName}'s Timelines
           </Text>
         </Box>
         <Box p={8} my={4}>
@@ -570,7 +597,7 @@ const TimeLineDoctor = () => {
                     >
                       <Badge
                         variant={item.status ? "solid" : "subtle"}
-                        colorScheme="green"
+                        colorScheme={item.status ? "green" : "red"}
                       >
                         {item.status ? "Varified" : "Pending"}
                       </Badge>

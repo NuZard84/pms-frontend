@@ -23,15 +23,15 @@ const Header = () => {
   const menuData = [
     {
       label: "My profile",
-      link: "/myprofile",
+      link: "/dashboard",
     },
     {
-      label: "Organization",
-      link: "/organization",
+      label: "Settings",
+      link: "/settings",
     },
     {
-      label: "History",
-      link: "/history",
+      label: "Help",
+      link: "/help",
     },
   ];
   return (
@@ -96,7 +96,7 @@ const Header = () => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Avatar size="md" name={"hello"} />
+            <Avatar bg="#2977ff" color="whitesmoke" size="md" name={"hello"} />
             <Menu>
               <MenuButton>
                 <Box
@@ -118,7 +118,12 @@ const Header = () => {
               <MenuList color={"black"} mt={"4"} py={"2"}>
                 {menuData.map((item, i) => (
                   <Fragment key={i}>
-                    <MenuItem fontWeight={"semibold"} opacity={0.75}>
+                    <MenuItem
+                      as={"a"}
+                      href={item.link}
+                      fontWeight={"semibold"}
+                      opacity={0.75}
+                    >
                       {item.label}
                     </MenuItem>
                     {i !== menuData.length - 1 && <MenuDivider />}

@@ -12,6 +12,7 @@ import {
   Textarea,
   Divider,
   Button,
+  useToast,
 } from "@chakra-ui/react";
 import { doctor_categories } from "./categoryData";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -19,13 +20,16 @@ import axios from "axios";
 import { VB_SERVER_API, SERVER_API } from "../../config";
 import { useDispatch, useSelector } from "react-redux";
 import { PATIENT_UPDATE_TIMELINE } from "../../redux/types";
+import { useNavigate } from "react-router-dom";
 
 const Consult = () => {
   const dispatch = useDispatch();
+  const toast = useToast();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
+  const navigate = useNavigate();
 
   const email = useSelector((state) => state.user.userDetail.email);
   console.log(email);
@@ -52,8 +56,25 @@ const Consult = () => {
         type: PATIENT_UPDATE_TIMELINE,
         payload: res.data.data.Timeline,
       });
+      toast({
+        title: "Consultancy report sent successfully.",
+        description: "Check your timeline to edit your report",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(res);
+      navigate("/patient/timeline");
     } catch (error) {
+      toast({
+        title: "Something went wrong",
+        description: "Please try again later.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(error);
     }
   };
@@ -230,7 +251,11 @@ const Consult = () => {
             />
           </FormControl>
           <Box display={"flex"} justifyContent={"flex-end"} width={"100%"}>
-            <Button colorScheme="blue" onClick={() => consultencyReportpost()}>
+            <Button
+              bg="#2977ff"
+              color="whitesmoke"
+              onClick={() => consultencyReportpost()}
+            >
               Submit
             </Button>
           </Box>
