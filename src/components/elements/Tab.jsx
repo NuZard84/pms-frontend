@@ -1,4 +1,4 @@
-import { Tab, TabList, TabPanel, Tabs, TabPanels } from "@chakra-ui/react";
+import { Tab, TabList, Tabs,  } from "@chakra-ui/react";
 
 export default function TabBar() {
   return (
