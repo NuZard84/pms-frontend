@@ -7,26 +7,12 @@ import {
 } from "../types";
 
 const initialState = {
-  isDoctor: false,
-  // isDetailsFilled: false,
   userDetail: null,
   Timeline: [],
 };
 
-export default function (state = initialState, action) {
+const patientReducer = (state = initialState, action) => {
   switch (action.type) {
-    case PATIENT_SET_IS_DOCTOR:
-      return {
-        ...state,
-        isDoctor: action.payload,
-      };
-
-    // case SET_IS_DETAILFILLED:
-    //   return {
-    //     ...state,
-    //     isDetailsFilled: action.payload,
-    //   };
-
     case PATIENT_SET_USER_DETAILS:
       return {
         ...state,
@@ -46,4 +32,6 @@ export default function (state = initialState, action) {
     default:
       return state;
   }
-}
+};
+
+export default patientReducer;

@@ -4,25 +4,32 @@ import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import { thunk } from "redux-thunk";
 import patientReducer from "./reducers/patientReducer";
+import userReducer from "./reducers/userReducer";
 
 const initialState = {};
 
 const middleware = [thunk];
 
-const doctorPersistConfig = {
+const userPersistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["userDetail", "isDetailfillled", "isDoctor"],
+  whitelist: ["userDetail", "isDoctor"],
 };
+// const doctorPersistConfig = {
+//   key: "root",
+//   storage: storage,
+//   whitelist: ["userDetail", "isDetailfillled"],
+// };
 const patientPersistConfig = {
   key: "root",
   storage: storage,
-  whitelist: ["userDetail", "isDetailfillled", "isDoctor", "Timeline"],
+  whitelist: ["Timeline"],
 };
 
 const reducers = combineReducers({
-  doctor: persistReducer(doctorPersistConfig, doctorReducer),
+  // doctor: persistReducer(doctorPersistConfig, doctorReducer),
   patient: persistReducer(patientPersistConfig, patientReducer),
+  user: persistReducer(userPersistConfig, userReducer),
   // doctor: doctorReducer,
   // patient: patientReducer,
 });

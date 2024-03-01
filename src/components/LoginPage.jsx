@@ -20,7 +20,7 @@ import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@chakra-ui/react";
 import { AuthLoginPost, AuthRegisterPost } from "../redux/actions/userActions";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const LoginPage = () => {
   const dispatch = useDispatch();
@@ -41,6 +41,9 @@ const LoginPage = () => {
   const handleTogglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
+  const redux = useSelector((state) => state);
+
+  console.log("redux", redux);
 
   useEffect(() => {
     console.log("email", email, "pass", password);

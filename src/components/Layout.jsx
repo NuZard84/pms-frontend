@@ -10,18 +10,21 @@ import { useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useEffect } from "react";
+import axios from "axios";
 
 const Layout = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const user =
-    useSelector((state) => state.doctor.userDetail) ||
-    useSelector((state) => state.patient.userDetail);
+  const user = useSelector((state) => state.user.userDetail);
 
   console.log("user", user);
 
   console.log(location.pathname);
+
+  const redux = useSelector((state) => state);
+  console.log("redux", redux);
 
   return (
     <Flex>
