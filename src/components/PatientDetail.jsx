@@ -8,7 +8,7 @@ export const dividerTheme = defineStyleConfig({
   },
 });
 
-const DoctorDetail = ({ doctor }) => {
+const DoctorDetail = ({ patient }) => {
   return (
     <>
       <Box
@@ -35,7 +35,7 @@ const DoctorDetail = ({ doctor }) => {
             </Text>
             &nbsp;
             <Text width="fit-content" color="gray.600">
-              {doctor.userDetail.name}
+              {patient.userDetail.name}
             </Text>
           </Box>
           <Box display="flex" paddingY="2">
@@ -44,7 +44,7 @@ const DoctorDetail = ({ doctor }) => {
             </Text>
             &nbsp;
             <Text width="fit-content" color="gray.600">
-              {doctor.userDetail.email}
+              {patient.userDetail.email}
             </Text>
           </Box>
           <Box display="flex" paddingY="2">
@@ -53,7 +53,7 @@ const DoctorDetail = ({ doctor }) => {
             </Text>
             &nbsp;
             <Text width="fit-content" color="gray.600">
-              {doctor.userDetail.age}
+              {patient.userDetail.age}
             </Text>
           </Box>
           <Box display="flex" paddingY="2">
@@ -62,7 +62,7 @@ const DoctorDetail = ({ doctor }) => {
             </Text>
             &nbsp;
             <Text width="fit-content" color="gray.600">
-              {doctor.userDetail.gender}
+              {patient.userDetail.gender}
             </Text>
           </Box>
           <Box display="flex" paddingY="2">
@@ -71,7 +71,7 @@ const DoctorDetail = ({ doctor }) => {
             </Text>
             &nbsp;
             <Text width="fit-content" color="gray.600">
-              {doctor.userDetail.education}
+              {patient.userDetail.education}
             </Text>
           </Box>
 
