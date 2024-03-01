@@ -17,8 +17,13 @@ import { Fragment } from "react";
 import { CiSearch } from "react-icons/ci";
 import { IoNotificationsOutline } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
+import { useSelector } from "react-redux";
 
 const Header = () => {
+  const user =
+    useSelector((state) => state.doctor.userDetail) ||
+    useSelector((state) => state.patient.userDetail);
+
   const menuData = [
     {
       label: "My profile",
@@ -95,11 +100,7 @@ const Header = () => {
             alignItems={"center"}
             justifyContent={"center"}
           >
-            <Avatar
-              size="md"
-              name="Segun Adebayo"
-              src="https://bit.ly/sage-adebayo"
-            />
+            <Avatar size="md" name={user.name} />
             <Menu>
               <MenuButton>
                 <Box
@@ -110,7 +111,7 @@ const Header = () => {
                   alignItems={"center"}
                 >
                   <Text color={"black"} fontWeight={"semibold"} fontSize={"md"}>
-                    Dr. Segun Adebayo
+                    {user.isDoctor ? `Dr ${user.name}` : `${user.name}`}
                   </Text>
                   <Box>
                     <TiArrowSortedDown color="black" />

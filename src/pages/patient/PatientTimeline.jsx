@@ -17,6 +17,7 @@ import {
   ModalBody,
   Textarea,
 } from "@chakra-ui/react";
+
 import { useDisclosure } from "@chakra-ui/react";
 import { useState, useRef } from "react";
 
@@ -88,12 +89,16 @@ const TimelinePatient = () => {
 
   const timeline = useSelector((state) => state.patient.Timeline);
   const email = useSelector((state) => state.patient.userDetail.email);
+  const user = useSelector((state) => state.patient.userDetail);
 
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
   const [medications, setMedication] = useState("");
   const [id, setId] = useState("");
   const [data, setData] = useState(timeline);
+
+  console.log("timeline", timeline);
+  console.log("user", user);
 
   const handleUpdateReport = (
     itemId,
@@ -102,13 +107,12 @@ const TimelinePatient = () => {
     symptoms
   ) => {
     console.log("rendered insider handleUpdateReport");
-    setId(itemId); // Set the ID of the item being edited
-    setMedicalHistory(medicalHistory); // Update medical history state
-    setMedication(medications); // Update medications state
-    setSymptoms(symptoms); // Update symptoms state
-    onOpen(); // Open the modal
+    setId(itemId);
+    setMedicalHistory(medicalHistory);
+    setMedication(medications);
+    setSymptoms(symptoms);
+    onOpen();
   };
-  //   console.log(id, medications, medicalHistory, symptoms);
 
   const updatedConsultencyReportPost = async () => {
     try {
@@ -131,8 +135,6 @@ const TimelinePatient = () => {
       console.log(error);
     }
   };
-
-  //   console.log(timeline);
 
   return (
     <>
@@ -182,7 +184,6 @@ const TimelinePatient = () => {
                 <Box
                   display={"flex"}
                   justifyContent={"center"}
-                  //   alignItems={"center"}
                   flex={1}
                   flexDirection={"column"}
                   ml={2}

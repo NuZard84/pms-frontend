@@ -16,10 +16,12 @@ import {
 import { doctor_categories } from "./categoryData";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
-import { VB_SERVER_API } from "../../config";
-import { useSelector } from "react-redux";
+import { VB_SERVER_API, SERVER_API } from "../../config";
+import { useDispatch, useSelector } from "react-redux";
+import { PATIENT_UPDATE_TIMELINE } from "../../redux/types";
 
 const Consult = () => {
+  const dispatch = useDispatch();
   const [selectedCategory, setSelectedCategory] = useState("");
   const [symptoms, setSymptoms] = useState("");
   const [medicalHistory, setMedicalHistory] = useState("");
@@ -39,12 +41,16 @@ const Consult = () => {
 
   const consultencyReportpost = async () => {
     try {
-      const res = await axios.post(`${VB_SERVER_API}/consult/patient`, {
+      const res = await axios.post(`${SERVER_API}/consult/patient`, {
         email,
         category: selectedCategory,
         symptoms,
         medicalHistory,
         medications,
+      });
+      dispatch({
+        type: PATIENT_UPDATE_TIMELINE,
+        payload: res.data.data.Timeline,
       });
       console.log(res);
     } catch (error) {

@@ -1,68 +1,225 @@
-import { Box, Text, Badge, Button, Collapse, Divider } from "@chakra-ui/react";
-import { useDispatch, useSelector } from "react-redux";
-import { FiEdit } from "react-icons/fi";
-import { useNavigate } from "react-router-dom";
 import {
-  PATIENT_UPDATE_TIMELINE,
-  PATIENT_UPDATE_TIMELINE_ID,
-} from "../../redux/types";
-import {
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
+  Box,
+  Text,
+  Badge,
+  Button,
+  Collapse,
+  Divider,
+  Avatar,
+  Flex,
+  Spacer,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
+  Input,
+  useDisclosure,
   FormControl,
   FormLabel,
   Textarea,
-  ModalCloseButton,
 } from "@chakra-ui/react";
-import { useDisclosure } from "@chakra-ui/react";
-import { Fragment, useState, useEffect } from "react";
-import { DOCTOR_UPDATE_TIMELINE } from "../../redux/types";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { PATIENT_UPDATE_TIMELINE } from "../../redux/types";
+import { Fragment, useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import { SERVER_API } from "../../config";
+import { SERVER_API, VB_SERVER_API } from "../../config";
+import { useParams } from "react-router-dom";
+import { VscSend } from "react-icons/vsc";
+import { GiArtificialHive } from "react-icons/gi";
+
+const ChatBotDrawer = ({
+  onClose,
+  isOpen,
+  chatInput,
+  setChatInput,
+  handleAiSearch,
+}) => {
+  const [allChats, setAllChats] = useState([]);
+
+  const memoizedChats = useMemo(() => {
+    return (
+      <>
+        {allChats?.map((item, i) => (
+          <Fragment key={i}>
+            <Box>
+              <Flex width={"100%"} mb={6}>
+                <Spacer />
+                <Box
+                  display={"flex"}
+                  placeSelf={"flex-end"}
+                  flexDirection={"column"}
+                  maxWidth={"84%"}
+                >
+                  <Box
+                    mb={2}
+                    display={"flex"}
+                    flexDir={"row"}
+                    alignItems={"center"}
+                    justifyContent={"flex-end"}
+                    gap={1}
+                  >
+                    <Avatar size={"xs"} bg={"blue.500"} />
+                    <Text textAlign={"right"}>You</Text>
+                  </Box>
+                  <Box
+                    borderWidth={"1px"}
+                    borderColor={"gray.400"}
+                    padding={2}
+                    rounded={"lg"}
+                  >
+                    <Text m={0} fontSize={"15px"}>
+                      {item.question}
+                    </Text>
+                  </Box>
+                </Box>
+              </Flex>
+              <Flex width={"100%"} mb={6}>
+                <Box
+                  display={"flex"}
+                  placeSelf={"flex-end"}
+                  flexDirection={"column"}
+                  maxWidth={"84%"}
+                >
+                  <Box
+                    mb={2}
+                    display={"flex"}
+                    flexDir={"row"}
+                    alignItems={"center"}
+                    gap={1}
+                  >
+                    <Avatar
+                      size={"xs"}
+                      bg={"blue.500"}
+                      icon={<GiArtificialHive size={20} />}
+                    />
+                    <Text textAlign={"left"}>PMS AI</Text>
+                  </Box>
+                  <Box
+                    borderWidth={"1px"}
+                    borderColor={"gray.400"}
+                    padding={2}
+                    rounded={"lg"}
+                    bg={"#2977ff"}
+                    textColor={"whitesmoke"}
+                  >
+                    <Text m={0}>{item.answer}</Text>
+                  </Box>
+                </Box>
+                <Spacer />
+              </Flex>
+            </Box>
+          </Fragment>
+        ))}
+      </>
+    );
+  }, [allChats]);
+
+  return (
+    <Drawer onClose={onClose} isOpen={isOpen} size={"sm"}>
+      <DrawerOverlay />
+      <DrawerContent>
+        <DrawerCloseButton />
+        <DrawerHeader>{`PMS chat bot`}</DrawerHeader>
+        <Divider colorScheme="facebook" />
+
+        <DrawerBody m={0} px={4}>
+          <Box
+            minH={"100vh"}
+            display={"flex"}
+            flexDirection={"column"}
+            justifyContent={"flex-end"}
+            overflowY={"auto"}
+          >
+            {memoizedChats}
+          </Box>
+        </DrawerBody>
+        <Divider colorScheme="facebook" />
+        <DrawerFooter>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            width={"100%"}
+            gap={3}
+            justifyContent={"center"}
+            alignItems={"center"}
+          >
+            <Input
+              size={"md"}
+              placeholder="Enter your query"
+              value={chatInput}
+              onChange={(e) => setChatInput(e.target.value)}
+            />
+            <Box
+              bg={"#2977ff"}
+              color={"whitesmoke"}
+              padding={"2"}
+              rounded={"lg"}
+              cursor={"pointer"}
+              onClick={() =>
+                handleAiSearch(chatInput, setAllChats, setChatInput)
+              }
+            >
+              <VscSend size={25} />
+            </Box>
+          </Box>
+        </DrawerFooter>
+      </DrawerContent>
+    </Drawer>
+  );
+};
 
 const TimeLineDoctor = () => {
+  const params = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isOpen, onToggle } = useDisclosure();
+  console.log(params.id);
+
+  const { isOpen, onClose, onOpen } = useDisclosure();
 
   const [prescription, setPrescription] = useState("");
   const [result, setResult] = useState("");
   const [openIndex, setOpenIndex] = useState(null);
-  const email = useSelector((state) => state.patient.userDetail.email);
+  const [chatInput, setChatInput] = useState("");
+
   const timeline123 = useSelector((state) => state.patient.Timeline);
 
   console.log("redux", timeline123);
-  const timelineRedux = useSelector(
-    (state) => state.patient.userDetail.Timeline
-  );
-  const [data, setData] = useState(timelineRedux);
+  const [email, setEmail] = useState("");
 
-  useEffect(() => {
-    console.log("hello", data);
-  }, [data]);
-
-  const [isVarified, setIsVarified] = useState(timelineRedux.map(() => false));
-  //   const [timeline, setTimeline] = useState([]);
-
-  //   useEffect(() => {
-  //     // setTimeline(timelineRedux);
-
-  //     console.log("timelineRedux", timelineRedux);
-  //   }, [timelineRedux]);
-
-  //   console.log("timelineRedux outside", timelineRedux);
+  const [isVarified, setIsVarified] = useState(timeline123.map(() => false));
 
   const handleCollapseToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
+  useEffect(() => {
+    const getPatient = async () => {
+      try {
+        console.log("getPatient");
+        const res = await axios.post(`${SERVER_API}/getpatient`, {
+          id: params.id,
+        });
+        setEmail(res.data.patient.email);
+        dispatch({
+          type: PATIENT_UPDATE_TIMELINE,
+          payload: res.data.patient.Timeline,
+        });
+        console.log(res.data.patient);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    getPatient();
+  }, []);
+
   const handleVarifyEdit = async (index, id) => {
-    const updatedTimeline = [...timelineRedux];
+    console.log("varify nd edit", index, id);
+    const updatedTimeline = [...timeline123];
     const currentItem = updatedTimeline[index];
 
     try {
@@ -89,8 +246,8 @@ const TimeLineDoctor = () => {
         result: updatedTimeline[index].result,
         status: Boolean(updatedTimeline[index].status),
       });
-      console.log(res.data.data.Timeline);
-      setData(res.data.data.Timeline);
+      console.log("res", res.data.data.Timeline);
+
       dispatch({
         type: PATIENT_UPDATE_TIMELINE,
         payload: res.data.data.Timeline,
@@ -100,10 +257,31 @@ const TimeLineDoctor = () => {
     }
   };
 
+  const handleAiSearch = async (que, setAllChats, setChatInput) => {
+    try {
+      const res = await axios.post(`${SERVER_API}/chatgpt`, {
+        userInput: que,
+      });
+
+      console.log("aisearch", res.data.response);
+      const searchObj = {
+        question: que,
+        answer: res.data.response,
+      };
+
+      setAllChats((prev) => [...prev, searchObj]);
+      setChatInput("");
+    } catch (error) {
+      console.log(error);
+      setChatInput("");
+    }
+  };
+
   return (
     <>
       <Box
         p={14}
+        position={"relative"}
         display={"flex"}
         flexDir={"column"}
         maxH={"100vh"}
@@ -124,6 +302,22 @@ const TimeLineDoctor = () => {
           },
         }}
       >
+        <Box position={"fixed"} bottom={"5%"} right={"5%"}>
+          <Button
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"center"}
+            alignItems={"center"}
+            colorScheme="blue"
+            gap={2}
+            onClick={() => onOpen()}
+          >
+            <Box>
+              <GiArtificialHive size={20} />
+            </Box>
+            Chat-bot
+          </Button>
+        </Box>
         <Box>
           <Text fontSize={"4xl"} color={"black"} fontWeight={"bold"}>
             Your Timelines
@@ -374,6 +568,13 @@ const TimeLineDoctor = () => {
           })}
         </Box>
       </Box>
+      <ChatBotDrawer
+        isOpen={isOpen}
+        onClose={onClose}
+        chatInput={chatInput}
+        setChatInput={setChatInput}
+        handleAiSearch={handleAiSearch}
+      />
     </>
   );
 };

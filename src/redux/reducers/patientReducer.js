@@ -3,6 +3,7 @@ import {
   PATIENT_SET_USER_DETAILS,
   PATIENT_UPDATE_TIMELINE_ID,
   PATIENT_UPDATE_TIMELINE,
+  LOGOUT_PATIENT,
 } from "../types";
 
 const initialState = {
@@ -39,6 +40,8 @@ export default function (state = initialState, action) {
         ...state,
         Timeline: action.payload,
       };
+    case LOGOUT_PATIENT:
+      return initialState;
 
     default:
       return state;
