@@ -78,7 +78,7 @@ const Layout = () => {
             <Link to="/patient/consult">
               <SidebarItems
                 icon={<BsQuestionSquare size={20} />}
-                text={"Consult a Dr"}
+                text={"Consult"}
                 alert={false}
                 active={location.pathname === "/patient/consult"}
               />
@@ -86,7 +86,7 @@ const Layout = () => {
             <Link to="/patient/timeline">
               <SidebarItems
                 icon={<BsQuestionSquare size={20} />}
-                text={"your timeline"}
+                text={"Your Timeline"}
                 alert={false}
                 active={location.pathname === "/patient/timeline"}
               />

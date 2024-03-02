@@ -156,7 +156,7 @@ const DoctorDetail = ({ doctor }) => {
       <Box p="10" display="flex" flexDirection="column" gap="1.5rem">
         <Box>
           <Text fontSize="4xl" fontWeight="bold">
-            Your Profile
+            My Profile
           </Text>
         </Box>
         <Divider size="1.5rem" colorScheme="blue" />
