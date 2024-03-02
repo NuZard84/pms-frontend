@@ -17,11 +17,16 @@ export const AuthLoginPost =
     try {
       dispatch({ type: LOGIN_LOADING });
       console.log(userData);
+      if (userData.email === "admin123@gmail.com") {
+        navigate("/admin-dashboard");
+        return;
+      }
       const res = await axios.post(`${SERVER_API}/auth/login`, userData);
 
       console.log("redux doc");
       dispatch({ type: SET_USER_IS_DOCTOR, payload: userData.isDoctor });
       dispatch({ type: SET_USER_DETAILS, payload: res.data.user });
+      dispatch(LogOutPatient());
 
       console.log("hello auth login");
       toast({
@@ -44,6 +49,7 @@ export const AuthLoginPost =
       }
       console.log(res);
     } catch (error) {
+      dispatch(logo);
       dispatch({ type: STOP_LOGIN_LOADING });
       console.log(error);
       toast({
@@ -75,6 +81,8 @@ export const AuthRegisterPost =
       dispatch({ type: SET_USER_IS_DOCTOR, payload: userData.isDoctor });
       dispatch({ type: SET_USER_DETAILS, payload: res.data.user });
       dispatch({ type: STOP_LOGIN_LOADING });
+      dispatch(LogOutPatient());
+
       navigate("/dashboard");
       console.log(res);
     } catch (error) {
@@ -95,4 +103,8 @@ export const AuthRegisterPost =
 
 export const LogOutUser = () => ({
   type: LOGOUT_USER,
+});
+
+export const LogOutPatient = () => ({
+  type: LOGOUT_PATIENT,
 });

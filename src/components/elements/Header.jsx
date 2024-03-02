@@ -22,16 +22,8 @@ import { useSelector } from "react-redux";
 const Header = () => {
   const menuData = [
     {
-      label: "My profile",
-      link: "/dashboard",
-    },
-    {
-      label: "Settings",
-      link: "/settings",
-    },
-    {
-      label: "Help",
-      link: "/help",
+      label: "Logout",
+      link: "/",
     },
   ];
   return (
