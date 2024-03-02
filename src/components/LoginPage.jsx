@@ -87,8 +87,10 @@ const LoginPage = () => {
           fontWeight="extrabold"
           color="white"
           textAlign="center"
+          fontFamily=""
+          letterSpacing=".5px"
         >
-          PMS - System
+          MedCare
         </Text>
       </Box>
       {variant === "register" ? (

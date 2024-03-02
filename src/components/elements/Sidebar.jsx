@@ -67,7 +67,7 @@ export default function Sidebar({ children }) {
             transitionDuration={"300ms"}
             transitionDelay={"0.1"}
           >
-            PMS
+            MedCare
           </Text>
           <Box
             cursor={"pointer"}
