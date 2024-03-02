@@ -11,6 +11,7 @@ import Consult from "./pages/patient/Consult";
 import TimelinePatient from "./pages/patient/PatientTimeline";
 import TimeLineDoctor from "./pages/doctor/DoctorTimeline";
 import PatientCard from "./components/patientCard";
+import HomePage from "./pages/HomePage";
 
 const commonRoutes = [
   {
@@ -47,6 +48,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LoginPage />,
+  },
+  {
+    path: "/home",
+    element: <HomePage />,
   },
   {
     path: "/doctor/filldetails",
