@@ -1,4 +1,4 @@
-import { SERVER_API, VB_SERVER_API, DIPAL_SERVER_API } from "../../config";
+import { SERVER_API } from "../../config";
 import {
   DOCTOR_SET_USER_DETAILS,
   LOGIN_LOADING,

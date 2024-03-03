@@ -27,7 +27,7 @@ const AllDoctors = () => {
     const getDoctor = async () => {
       try {
         const res = await axios.get(`${SERVER_API}/fetchall/doctors`);
-
+        console.log(res);
         setAllDoctors(res.data.doctors);
       } catch (error) {
         console.log(error);

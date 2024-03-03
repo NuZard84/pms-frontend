@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import axios from "axios";
 import { Fragment, useEffect } from "react";
-import { SERVER_API, VB_SERVER_API } from "../config";
+import { SERVER_API } from "../config";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
