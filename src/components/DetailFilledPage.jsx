@@ -21,7 +21,7 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
-import { SERVER_API, VB_SERVER_API } from "../config";
+import { SERVER_API } from "../config";
 import { useToast } from "@chakra-ui/react";
 
 import { useDispatch, useSelector } from "react-redux";

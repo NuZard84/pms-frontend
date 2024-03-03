@@ -17,7 +17,7 @@ import {
 import { doctor_categories } from "./categoryData";
 import { IoMdArrowDropdown } from "react-icons/io";
 import axios from "axios";
-import { VB_SERVER_API, SERVER_API } from "../../config";
+import { SERVER_API } from "../../config";
 import { useDispatch, useSelector } from "react-redux";
 import { PATIENT_UPDATE_TIMELINE } from "../../redux/types";
 import { useNavigate } from "react-router-dom";

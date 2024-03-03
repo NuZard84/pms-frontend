@@ -7,7 +7,7 @@ import {
   PATIENT_UPDATE_TIMELINE_ID,
 } from "../../redux/types";
 import axios from "axios";
-import { SERVER_API, VB_SERVER_API } from "../../config";
+import { SERVER_API } from "../../config";
 import {
   Modal,
   ModalOverlay,

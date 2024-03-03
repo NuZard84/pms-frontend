@@ -29,7 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { PATIENT_UPDATE_TIMELINE } from "../../redux/types";
 import { Fragment, useState, useEffect, useMemo } from "react";
 import axios from "axios";
-import { SERVER_API, VB_SERVER_API } from "../../config";
+import { SERVER_API } from "../../config";
 import { useParams } from "react-router-dom";
 import { VscSend } from "react-icons/vsc";
 import { GiArtificialHive } from "react-icons/gi";
