@@ -5,10 +5,16 @@ import AllPatient from "./AllPAtient";
 import AllDoctor from "./AllDoctor";
 
 const AdminPage = () => {
+  const menuData = [
+    {
+      label: "Logout",
+      link: "/",
+    },
+  ];
   return (
     <Box>
       <Box mb={8}>
-        <Header />
+        <Header menuData={menuData} />
       </Box>
       <Divider />
       <Box>

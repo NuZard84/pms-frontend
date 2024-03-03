@@ -33,9 +33,7 @@ const Consult = () => {
 
   const email = useSelector((state) => state.user.userDetail.email);
   console.log(email);
-  const timelineRedux = useSelector(
-    (state) => state.patient.userDetail.Timeline
-  );
+  const timelineRedux = useSelector((state) => state.user.userDetail.Timeline);
 
   console.log(timelineRedux);
 

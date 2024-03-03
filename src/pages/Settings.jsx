@@ -26,6 +26,7 @@ const SettingsPage = () => {
         type: SET_USER_DETAILS,
         payload: response.data.data,
       });
+
       toast({
         title: "you add API key successfully !",
         description: "Now you can use Ai  bot in your timelines",

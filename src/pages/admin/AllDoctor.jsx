@@ -69,7 +69,7 @@ const AllDoctors = () => {
           secKey,
         });
         console.log(res);
-        setAllDoctors([...AllDoctors, res.data]);
+        setAllDoctors([...AllDoctors, res.data.data]);
         onClose();
       } catch (error) {
         console.log(error);

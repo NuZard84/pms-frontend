@@ -19,13 +19,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useSelector } from "react-redux";
 
-const Header = () => {
-  const menuData = [
-    {
-      label: "Logout",
-      link: "/",
-    },
-  ];
+const Header = ({ menuData }) => {
   return (
     <Box as="header">
       <Box

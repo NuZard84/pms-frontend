@@ -188,13 +188,13 @@ const ChatBotDrawer = ({
                   chatInput,
                   setAllChats,
                   setChatInput,
-                  patient.Timeline.category,
+                  patient.Timeline[patient.Timeline.length - 1].category,
                   patient.age,
                   patient.gender,
-                  patient.Timeline.bloodPressure,
-                  patient.Timeline.heartRate,
-                  patient.Timeline.respiratoryRate,
-                  patient.Timeline.bodyTemperature,
+                  patient.Timeline[patient.Timeline.length - 1].bloodPressure,
+                  patient.Timeline[patient.Timeline.length - 1].heartRate,
+                  patient.Timeline[patient.Timeline.length - 1].respiratoryRate,
+                  patient.Timeline[patient.Timeline.length - 1].bodyTemperature,
                   isEnable
                 )
               }
