@@ -1,4 +1,4 @@
-import { Box, Input, Flex, Text, Button } from "@chakra-ui/react";
+import { Box, Input, Flex, Text, Button, useToast } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { SERVER_API } from "../config";
 import { useDispatch, useSelector } from "react-redux";
@@ -6,31 +6,47 @@ import axios from "axios";
 import { SET_USER_DETAILS } from "../redux/types";
 
 const SettingsPage = () => {
-  const [key, setKey] = useState("");
   const email = useSelector((state) => state.user.userDetail.email); // replace with your email
-  const iskeyInRedux = useSelector((state) => state.user.userDetail.secKey);
+  const user = useSelector((state) => state.user.userDetail);
 
-  const [isKey, setIsKey] = useState(false);
+  const [isKey, setIsKey] = useState(user.isKeyVerified);
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    setIsKey(false); // Reset isKey state on every render
-  }, []);
+  const toast = useToast();
+  const [key, setKey] = useState("");
 
   const handleKeyApply = async () => {
     try {
-      const response = await axios.post(`${SERVER_API}/seckey/add`, {
+      console.log("cheack", key, email);
+      const response = await axios.post(`${SERVER_API}/verifykey/`, {
         secKey: key,
         email,
       });
+      console.log(response);
       dispatch({
         type: SET_USER_DETAILS,
-        payload: response.data,
+        payload: response.data.data,
+      });
+
+      toast({
+        title: "you add API key successfully !",
+        description: "Now you can use Ai  bot in your timelines",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
       });
       setIsKey(true);
       console.log(response);
-      setKey("");
+      // setKey("");
     } catch (err) {
+      toast({
+        title: "Something went wrong ",
+        description: "Cheack your API key and try again",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "top",
+      });
       console.log(err);
     }
   };
@@ -56,13 +72,13 @@ const SettingsPage = () => {
             ml="10px"
             bg="#2977ff"
             color="whitesmoke"
-            onClick={handleKeyApply}
+            onClick={() => handleKeyApply()}
           >
             Apply
           </Button>
         </Flex>
         <Box>
-          {(isKey || iskeyInRedux) && (
+          {isKey && (
             <Text
               fontSize="medium"
               pl="35px"

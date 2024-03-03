@@ -22,6 +22,7 @@ import {
   Textarea,
   useToast,
   Image,
+  Switch,
 } from "@chakra-ui/react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -39,8 +40,10 @@ const ChatBotDrawer = ({
   chatInput,
   setChatInput,
   handleAiSearch,
+  patient,
 }) => {
   const [allChats, setAllChats] = useState([]);
+  const [isEnable, setIsEnable] = useState(false);
 
   const memoizedChats = useMemo(() => {
     return (
@@ -140,7 +143,25 @@ const ChatBotDrawer = ({
           </Box>
         </DrawerBody>
         <Divider colorScheme="facebook" />
-        <DrawerFooter>
+        <DrawerFooter
+          display={"flex"}
+          flexDirection={"column"}
+          alignItems={"flex-start"}
+          justifyContent={"center"}
+        >
+          <Box ml={1}>
+            <FormControl display="flex" alignItems="center">
+              <FormLabel htmlFor="isEnable-alerts" mb="0">
+                Share addition data
+              </FormLabel>
+              <Switch
+                id="isEnable-alerts"
+                onChange={() => {
+                  setIsEnable((prev) => (prev === true ? false : true));
+                }}
+              />
+            </FormControl>
+          </Box>
           <Box
             display={"flex"}
             flexDirection={"row"}
@@ -148,6 +169,7 @@ const ChatBotDrawer = ({
             gap={3}
             justifyContent={"center"}
             alignItems={"center"}
+            mt={4}
           >
             <Input
               size={"md"}
@@ -162,7 +184,19 @@ const ChatBotDrawer = ({
               rounded={"lg"}
               cursor={"pointer"}
               onClick={() =>
-                handleAiSearch(chatInput, setAllChats, setChatInput)
+                handleAiSearch(
+                  chatInput,
+                  setAllChats,
+                  setChatInput,
+                  patient.Timeline[patient.Timeline.length - 1].category,
+                  patient.age,
+                  patient.gender,
+                  patient.Timeline[patient.Timeline.length - 1].bloodPressure,
+                  patient.Timeline[patient.Timeline.length - 1].heartRate,
+                  patient.Timeline[patient.Timeline.length - 1].respiratoryRate,
+                  patient.Timeline[patient.Timeline.length - 1].bodyTemperature,
+                  isEnable
+                )
               }
             >
               <VscSend size={25} />
@@ -198,12 +232,14 @@ const TimeLineDoctor = () => {
 
   console.log("redux", timeline123);
   const [email, setEmail] = useState("");
-  const [patientName, setPatientName] = useState("");
+  const [patient, setPatient] = useState([]);
   const [isVarified, setIsVarified] = useState(timeline123.map(() => false));
 
   const handleCollapseToggle = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
+
+  const user = useSelector((state) => state.user.userDetail);
 
   useEffect(() => {
     const getPatient = async () => {
@@ -213,7 +249,7 @@ const TimeLineDoctor = () => {
           id: params.id,
         });
         setEmail(res.data.patient.email);
-        setPatientName(res.data.patient.name);
+        setPatient(res.data.patient);
         setTimeLine(res.data.patient.Timeline);
         // dispatch({
         //   type: PATIENT_UPDATE_TIMELINE,
@@ -296,10 +332,30 @@ const TimeLineDoctor = () => {
     }
   };
 
-  const handleAiSearch = async (que, setAllChats, setChatInput) => {
+  const handleAiSearch = async (
+    que,
+    setAllChats,
+    setChatInput,
+    category,
+    age,
+    gender,
+    bp,
+    hr,
+    ol,
+    temp,
+    isEnable
+  ) => {
     try {
       const res = await axios.post(`${SERVER_API}/chatgpt`, {
         userInput: que,
+        isEnable,
+        category,
+        temp,
+        age,
+        gender,
+        bp,
+        hr,
+        ol,
       });
 
       console.log("aisearch", res.data.response);
@@ -341,7 +397,25 @@ const TimeLineDoctor = () => {
           },
         }}
       >
-        <Box position={"fixed"} bottom={"5%"} right={"2%"}>
+        <Box
+          position={"fixed"}
+          bottom={"5%"}
+          right={"2%"}
+          onClick={() => {
+            if (user.isKeyVerified) {
+              onOpen();
+            } else {
+              toast({
+                title: "you do not add API key !",
+                description: "Go to Settings and apply your unique API key",
+                status: "info",
+                duration: 5000,
+                isClosable: true,
+                position: "top",
+              });
+            }
+          }}
+        >
           {/* <Button
             display={"flex"}
             flexDirection={"row"}
@@ -356,7 +430,6 @@ const TimeLineDoctor = () => {
               <GiArtificialHive size={20} />
             </Box> */}
           <Image
-            onClick={() => onOpen()}
             borderRadius="full"
             boxSize="60px"
             alt="Bot"
@@ -366,7 +439,7 @@ const TimeLineDoctor = () => {
         </Box>
         <Box>
           <Text fontSize={"4xl"} color={"black"} fontWeight={"bold"}>
-            {patientName}'s Timelines
+            {patient.name}'s Timelines
           </Text>
         </Box>
         <Box p={8} my={4}>
@@ -632,7 +705,7 @@ const TimeLineDoctor = () => {
                         p={4}
                         color="black"
                         mt="2"
-                        bg="whitesmoke"
+                        bg="blue.50"
                         rounded="md"
                         shadow="md"
                         display={"flex"}
@@ -763,6 +836,7 @@ const TimeLineDoctor = () => {
         chatInput={chatInput}
         setChatInput={setChatInput}
         handleAiSearch={handleAiSearch}
+        patient={patient}
       />
     </>
   );

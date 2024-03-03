@@ -19,21 +19,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { TiArrowSortedDown } from "react-icons/ti";
 import { useSelector } from "react-redux";
 
-const Header = () => {
-  const menuData = [
-    {
-      label: "My profile",
-      link: "/dashboard",
-    },
-    {
-      label: "Settings",
-      link: "/settings",
-    },
-    {
-      label: "Help",
-      link: "/help",
-    },
-  ];
+const Header = ({ menuData }) => {
   return (
     <Box as="header">
       <Box

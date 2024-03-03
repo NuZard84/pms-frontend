@@ -26,6 +26,20 @@ const Layout = () => {
   const redux = useSelector((state) => state);
   console.log("redux", redux);
 
+  const menuData = [
+    {
+      label: "My profile",
+      link: "/dashboard",
+    },
+    {
+      label: "Settings",
+      link: "/settings",
+    },
+    {
+      label: "Help",
+      link: "/help",
+    },
+  ];
   return (
     <Flex>
       <Sidebar>
@@ -91,14 +105,7 @@ const Layout = () => {
                 active={location.pathname === "/patient/timeline"}
               />
             </Link>
-            <Link to="/settings">
-              <SidebarItems
-                icon={<IoSettingsOutline size={20} />}
-                text={"Settings"}
-                alert={false}
-                active={location.pathname === "/settings"}
-              />
-            </Link>
+
             <Link to="/help">
               <SidebarItems
                 icon={<BsQuestionSquare size={20} />}
@@ -111,7 +118,7 @@ const Layout = () => {
         )}
       </Sidebar>
       <Box display={"flex"} flexDirection={"column"} w="100%">
-        <Header />
+        <Header menuData={menuData} />
         <Box flex="1" p="4">
           {/* Main content goes here */}
           <Outlet />
