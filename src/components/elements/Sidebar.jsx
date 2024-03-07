@@ -12,7 +12,7 @@ import { MdOutlineArrowBackIosNew } from "react-icons/md";
 import { LuLogOut } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { LogOutUser } from "../../redux/actions/userActions";
+import { LogOutPatient, LogOutUser } from "../../redux/actions/userActions";
 
 const SidebarContext = createContext();
 
@@ -36,6 +36,7 @@ export default function Sidebar({ children }) {
     });
     console.log("logout");
     dispatch(LogOutUser());
+    dispatch(LogOutPatient());
     navigate("/");
   };
 

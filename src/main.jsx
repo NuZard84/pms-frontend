@@ -9,7 +9,7 @@ const theme = extendTheme({
   styles: {
     global: {
       "::-webkit-scrollbar": {
-        width: "4px",
+        width: "3px",
       },
       "::-webkit-scrollbar-track": {
         background: "#f1f1f1",

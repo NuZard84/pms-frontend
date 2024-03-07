@@ -61,6 +61,14 @@ const Layout = () => {
                 active={location.pathname === "/patients"}
               />
             </Link>
+            <Link to="/doctor/conversations">
+              <SidebarItems
+                icon={<BsQuestionSquare size={20} />}
+                text={"Conversations"}
+                alert={false}
+                active={location.pathname === "/doctor/conversations"}
+              />
+            </Link>
             <Link to="/settings">
               <SidebarItems
                 icon={<IoSettingsOutline size={20} />}
@@ -105,7 +113,14 @@ const Layout = () => {
                 active={location.pathname === "/patient/timeline"}
               />
             </Link>
-
+            <Link to="/patient/conversations">
+              <SidebarItems
+                icon={<BsQuestionSquare size={20} />}
+                text={"Conversations"}
+                alert={false}
+                active={location.pathname === "/patient/conversations"}
+              />
+            </Link>
             <Link to="/help">
               <SidebarItems
                 icon={<BsQuestionSquare size={20} />}

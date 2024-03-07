@@ -13,7 +13,10 @@ import TimeLineDoctor from "./pages/doctor/DoctorTimeline";
 import PatientCard from "./components/patientCard";
 import AdminPage from "./pages/admin/AdminPage";
 import HomePage from "./pages/HomePage";
-
+import DoctorConversations from "./pages/doctor/DoctorConversations";
+import DoctorConversationPage from "./pages/doctor/DoctorConversationPage";
+import PatientConversations from "./pages/patient/PatientConversations";
+import PatientConversationPage from "./pages/patient/PatientConversationPage";
 const commonRoutes = [
   {
     path: "/dashboard",
@@ -42,6 +45,22 @@ const commonRoutes = [
   {
     path: "/doctor/timeline/:id",
     element: <TimeLineDoctor />,
+  },
+  {
+    path: "/doctor/conversations",
+    element: <DoctorConversations />,
+  },
+  {
+    path: "/doctor/conversation/:docid",
+    element: <DoctorConversationPage />,
+  },
+  {
+    path: "/patient/conversations",
+    element: <PatientConversations />,
+  },
+  {
+    path: "/patient/conversation/:patid",
+    element: <PatientConversationPage />,
   },
 ];
 
